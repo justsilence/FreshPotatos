@@ -7,7 +7,7 @@
   - movie page
   
 ### registered user
-- home (sign in/ log in)
+- home (sign up/ log in)
   - movie page
     - comment rating
   - profile
