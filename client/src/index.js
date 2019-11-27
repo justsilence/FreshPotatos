@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import Home from './components/Home';
+import MovieList from './components/MovieList';
 import * as serviceWorker from './serviceWorker';
-import MovieList from './components/movieList';
+
 
 
 ReactDOM.render(<MovieList texts={['movie1', 'movie2', 'movie3']}/>, document.getElementById('root'));

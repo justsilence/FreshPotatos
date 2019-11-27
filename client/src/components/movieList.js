@@ -13,6 +13,8 @@ import UpdateIcon from '@material-ui/icons/Update';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MovieIcon from '@material-ui/icons/Movie';
 
+import Navbar from './Navbar'
+
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -29,7 +31,12 @@ const useStyles = makeStyles(theme => ({
 export default function MovieList(props) {
   const classes = useStyles();
   return (
+      <div>
+    <div>
+    <Navbar/>
+  </div>
     <div className={classes.root}>
+        
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
           <Typography variant="h6" className={classes.title}>
@@ -59,6 +66,7 @@ export default function MovieList(props) {
           </div>
         </Grid>
       </Grid>
+    </div>
     </div>
   );
 }
