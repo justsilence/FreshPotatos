@@ -14,7 +14,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import MovieIcon from '@material-ui/icons/Movie';
 
 
-
+// self defined styles
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
@@ -35,29 +35,29 @@ export default function MovieList(props) {
     <div className={classes.root}>
         
       <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={12}>
           <Typography variant="h6" className={classes.title}>
             Movie List
           </Typography>
           <div className={classes.demo}>
             <List>
                 {props.texts.map(text => (
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <MovieIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={text} />
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={() => {window.alert("update")}} edge="start" aria-label="update">
-                      <UpdateIcon />
-                    </IconButton>
-                    <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <MovieIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={text} />
+                    <ListItemSecondaryAction>
+                      <IconButton onClick={() => {window.alert("update")}} edge="start" aria-label="update">
+                        <UpdateIcon />
+                      </IconButton>
+                      <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
                 ))}
             </List>
           </div>
