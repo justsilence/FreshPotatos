@@ -1,6 +1,11 @@
-const express = require('express');
 const mongoose = require('mongoose');
+const express = require('express');
+var cors = require('cors');
 const bodyParser = require('body-parser');
+const logger = require('morgan');
+var passport = require('passport');
+const dotenv = require('dotenv');
+dotenv.config();
 // init project
 const mongoDB = ("mongodb+srv://"+
                  process.env.USERNAME+
@@ -12,7 +17,7 @@ const mongoDB = ("mongodb+srv://"+
                  +process.env.DATABASE);
 // console.log("Connection String: "+mongoDB);
 
-mongoose.connect(mongoDB, {useNewUrlParser: true, retryWrites: true});
+mongoose.connect(mongoDB, {useNewUrlParser: true, retryWrites: true, useUnifiedTopology: true});
 
 //debugging 
 mongoose.connection.on('connected', function (){
@@ -28,26 +33,17 @@ mongoose.connection.on('disconnected', function (){
 });
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
 var indexRouter = require('./routes/index');
-// var studentsAPI = require('./api/students');
-// var coursesAPI = require('./api/courses');
-
 
 //use the static files in the public folder
 app.use(express.static('public'));
 
-//tell express where to get your views and which template engine to use
-app.set("views", __dirname + "/views/");
-app.set("view engine", "ejs");
-
-
-app.use('/', indexRouter);
-app.use('/api/students/', studentsAPI);
-app.use('/api/courses/', coursesAPI);
+app.use('/api', indexRouter);
 
 
 // listen for requests :)
