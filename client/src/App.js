@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
 import Home from './components/Home';
-import Navbar from './components/navbar';
+import Navbar from './components/Navbar';
 import MovieList from './components/MovieList';
 import MovieDetail from './components/MovieDetail';
-import MovieModify from './components/movieModify';
-import Register from './components/register';
+import MovieModify from './components/MovieModify';
+import Register from './components/Register';
 
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 function App() {
