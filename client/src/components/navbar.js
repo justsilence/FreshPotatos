@@ -15,6 +15,11 @@ import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import SendIcon from '@material-ui/icons/Send';
+import {NavLink} from 'react-router-dom';
+
 const useStyles = makeStyles(theme => ({
   grow: {
     flexGrow: 1,
@@ -75,22 +80,33 @@ const useStyles = makeStyles(theme => ({
       display: 'none',
     },
   },
+
+  // root: {
+  //   '&:focus': {
+  //     backgroundColor: theme.palette.primary.main,
+  //     '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+  //       color: theme.palette.common.white,
+  //     },
+  //   },
+  // },
 }));
 
 export default function Navbar() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [navAnchorEl, setNavAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isNavMenuOpen = Boolean(navAnchorEl);
 
   const handleProfileMenuOpen = event => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl('Home');
+    setMobileMoreAnchorEl(null);
   };
 
   const handleMenuClose = () => {
@@ -101,6 +117,46 @@ export default function Navbar() {
   const handleMobileMenuOpen = event => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  //added by Quan
+  const handleNavMenuOpen = event => {
+    setNavAnchorEl(event.currentTarget);
+  };
+
+  const handleNavMenuClose = () => {
+    setNavAnchorEl(null);
+  };
+
+  const navMenuId = 'primary-search-account-menu-nav';
+  const renderNavMenu = (
+    <Menu
+        id={navMenuId}
+        anchorEl={navAnchorEl}
+        keepMounted
+        open={isNavMenuOpen}
+        onClose={handleNavMenuClose}
+      >
+        <MenuItem>
+          <ListItemIcon>
+            <SendIcon fontSize="small" />
+          </ListItemIcon>
+          <NavLink exact to="/">Home</NavLink>
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <SendIcon fontSize="small" />
+          </ListItemIcon>
+          <NavLink exact to="/list">List</NavLink>
+        </MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <SendIcon fontSize="small" />
+          </ListItemIcon>
+          <NavLink exact to="/detail">Detail</NavLink>
+        </MenuItem>
+      </Menu>
+    
+  );
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -168,6 +224,7 @@ export default function Navbar() {
             className={classes.menuButton}
             color="inherit"
             aria-label="open drawer"
+            onClick={handleNavMenuOpen}
           >
             <MenuIcon />
           </IconButton>
@@ -225,6 +282,7 @@ export default function Navbar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {renderNavMenu}
     </div>
   );
 }

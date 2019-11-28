@@ -13,7 +13,7 @@ import UpdateIcon from '@material-ui/icons/Update';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MovieIcon from '@material-ui/icons/Movie';
 
-import Navbar from './Navbar'
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -31,10 +31,7 @@ const useStyles = makeStyles(theme => ({
 export default function MovieList(props) {
   const classes = useStyles();
   return (
-      <div>
-    <div>
-    <Navbar/>
-  </div>
+    
     <div className={classes.root}>
         
       <Grid container spacing={2}>
@@ -67,6 +64,6 @@ export default function MovieList(props) {
         </Grid>
       </Grid>
     </div>
-    </div>
+    
   );
 }

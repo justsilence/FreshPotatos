@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
-import Navbar from './Navbar'
 
 class MovieModify extends Component{
     render() {
         return (
           <div>
-            <Navbar/>
+            Movie moodify
           </div>
         );
       }
