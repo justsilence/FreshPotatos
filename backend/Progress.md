@@ -9,4 +9,17 @@
 - ### Process data
 
 
+## Not yet:
+
+- ### Restful API
+   - detail
+   - profile
+   
+- ### github & twitter Oauth
+
+- ### deployment(azure) auto-update database
+
+
+
+
   
