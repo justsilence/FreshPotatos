@@ -17,7 +17,15 @@ const userSchema = new Schema({
         minlength: 5,
         maxlength: 64
     },
-    isAdmin: Boolean
+    isAdmin: Boolean,
+    review: [
+        {
+            review_id: {
+                type: Schema.Types.ObjectId,
+                ref: 'review'
+            }
+        }
+    ]
 });
 
-module.exports = mongoose.model("user", courseSchema);
+module.exports = mongoose.model("User", userSchema);
