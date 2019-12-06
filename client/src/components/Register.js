@@ -43,13 +43,9 @@ const useStyles = makeStyles(theme => ({
 export default function Register() {
   const classes = useStyles();
   const [email, setEmail] = React.useState();
-  const handleChangeEmail = event => {
-    setEmail(event.target.value);
-  };
+  const handleChangeEmail = event => { setEmail(event.target.value); };
   const [password, setPassword] = React.useState();
-  const handleChangePassword = event => {
-    setPassword(event.target.value);
-  };
+  const handleChangePassword = event => { setPassword(event.target.value); };
 
   return (
     <Container component="main" maxWidth="xs">
@@ -111,7 +107,16 @@ export default function Register() {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                onClick={(e) => { e.preventDefault(); window.alert(email); }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (email == undefined) {
+                    window.alert("email is empty, please input email");
+                  } else if (email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+                    window.alert(email);
+                  } else {
+                    window.alert('invalid email');
+                  }
+                }}
               >
                 Sign In
               </Button>
