@@ -12,20 +12,4 @@ router.post('/', (req, res) => {
     res.send(body);
 });
 
-router.get('/signin', (req, res) => {
-
-});
-
-router.get('/signup', (req, res) => {
-
-});
-
-router.post('/signin', (req, res) => {
-
-});
-
-router.post('/signup', (req, res) => {
-
-});
-
 module.exports = router;

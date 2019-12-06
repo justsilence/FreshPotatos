@@ -17,7 +17,7 @@ const mongoDB = ("mongodb+srv://"+
                  +process.env.DATABASE);
 // console.log("Connection String: "+mongoDB);
 
-mongoose.connect(mongoDB, {useNewUrlParser: true, retryWrites: true, useUnifiedTopology: true});
+mongoose.connect(mongoDB, {useNewUrlParser: true, retryWrites: false, useUnifiedTopology: true});
 
 //debugging 
 mongoose.connection.on('connected', function (){
@@ -37,14 +37,20 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(passport.initialize());
+app.use(passport.session());
 
-var indexRouter = require('./routes/index');
-
+const indexRouter = require('./routes/index');
+const userRouter = require('./routes/user');
+const reviewRouter = require('./routes/review');
+const movieRouter = require('./routes/movie');
 //use the static files in the public folder
 app.use(express.static('public'));
 
-app.use('/api', indexRouter);
-
+app.use('/api/index', indexRouter);
+app.use('/api/user', userRouter);
+app.use('/api/review', reviewRouter);
+app.use('/api/movie', movieRouter);
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function() {
