@@ -49,7 +49,7 @@ the return value will be
 ```JS
 {
     "auth": true,
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZGVhZDhjYmEzMmFlY2FmOTZkMTZlOWEiLCJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWF0IjoxNTc1NjczNTk0LCJleHAiOjE1NzU2NzcxOTR9.xyvb8m62SKI0OuAtLf6CUNSYWVk7GWRMioycUf9gBu0",
+    "token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZGVhZDhjYmEzMmFlY2FmOTZkMTZlOWEiLCJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWF0IjoxNTc1NjczNzU3LCJleHAiOjE1NzU2NzczNTd9.TcxtQ6zgAWDsmv7xLZT42ifuMWCXDUcsLqQIZ0r4flg",
     "message": "user found & logged in"
 }
 ```
