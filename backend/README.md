@@ -12,6 +12,7 @@ Create a `.env` file in `backend` folder, put your
 * `PASSWORD=<REPLACE>`
 * `HOST=<REPALCE>`
 * `DATABASE=<REPLACE>`
+* `SECRET_KEY=<REPLACE>`
 
 ### How to use?
 
@@ -41,6 +42,24 @@ Use `GET api/user/login` to login
     "email": "test1@test.com",
     "password": 12345678
 }
+```
+
+the return value will be
+
+```JS
+{
+    "auth": true,
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZGVhZDhjYmEzMmFlY2FmOTZkMTZlOWEiLCJlbWFpbCI6InRlc3QyQHRlc3QuY29tIiwiaWF0IjoxNTc1NjczNTk0LCJleHAiOjE1NzU2NzcxOTR9.xyvb8m62SKI0OuAtLf6CUNSYWVk7GWRMioycUf9gBu0",
+    "message": "user found & logged in"
+}
+```
+
+### Before any operation which will modify database, need authentication
+
+Set the token in HTTP request header 
+
+```
+Authorization: {token}
 ```
 
 Use `GET api/user/profile` to access user's profile
