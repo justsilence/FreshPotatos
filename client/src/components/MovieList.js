@@ -31,9 +31,7 @@ const useStyles = makeStyles(theme => ({
 export default function MovieList(props) {
   const classes = useStyles();
   return (
-    
     <div className={classes.root}>
-        
       <Grid container spacing={2}>
         <Grid item xs={12} md={12}>
           <Typography variant="h6" className={classes.title}>
@@ -64,6 +62,5 @@ export default function MovieList(props) {
         </Grid>
       </Grid>
     </div>
-    
   );
 }
