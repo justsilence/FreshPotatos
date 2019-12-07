@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import './App.css';
 import Home from './components/Home';
 import Navbar from './components/Navbar';
@@ -8,6 +8,7 @@ import MovieModify from './components/MovieModify';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
+import { AuthContext } from "./context/auth";
 
 const movieInfo = {
   name: 'Terminator 2: Judgment Day',
@@ -42,8 +43,15 @@ const movieInfo = {
 
 const moviesList = ['movie1', 'movie2', 'movie3', 'for the sake of demo, dummy movies are there']
 
-function App() {
+function App(props) {
+  const [authTokens, setAuthTokens] = useState();
+  
+  const setTokens = (data) => {
+    localStorage.setItem("tokens", JSON.stringify(data));
+    setAuthTokens(data);
+  }
   return (
+    <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
     <BrowserRouter>
       <div className="App">
         <Navbar/>
@@ -57,6 +65,7 @@ function App() {
         </Switch>
       </div>
       </BrowserRouter>
+      </AuthContext.Provider>
   );
 }
 
