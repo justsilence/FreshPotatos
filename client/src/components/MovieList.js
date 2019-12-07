@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import UpdateIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MovieIcon from '@material-ui/icons/Movie';
+import { useAuth } from "../context/auth";
 
 
 // self defined styles
@@ -51,6 +52,7 @@ class MovieList extends React.Component{
   }
 
   render(){
+    console.log(authTokens);
     return (
       <div className={this.props.classes.root}>
         <Grid container spacing={2}>
@@ -69,7 +71,7 @@ class MovieList extends React.Component{
                     </ListItemAvatar>
                     <ListItemText primary={movie.name} />
                     <ListItemSecondaryAction>
-                      <IconButton href={'/detail?id='+ movie.id} edge="start" aria-label="update">
+                      <IconButton href={'/detail/'+ movie.id} edge="start" aria-label="update">
                         <UpdateIcon />
                       </IconButton>
                       <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
@@ -89,5 +91,6 @@ class MovieList extends React.Component{
 
 export default function Hook(props) {
   const classes = useStyles();
-  return <MovieList classes={classes} fetchURL={props.fetchURL}>Hook</MovieList>;
+  const { authTokens } = useAuth();
+  return <MovieList classes={classes} authTokens={authTokens} fetchURL={props.fetchURL}>Hook</MovieList>;
 }

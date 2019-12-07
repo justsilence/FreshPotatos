@@ -49,56 +49,69 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-
 class MovieDetail extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      movies_comments: {}
+      fetchURL: 'https://web-final-demo.azurewebsites.net/api/movie/'+this.props.routerProps.match.params.id,
+      movieInfoReview: {
+        movie:{
+          genre:[],
+          actor:[],
+          director:[],
+          _id: '',
+          name:'',
+          image:'',
+          description:'',
+          datePublished:'',
+          rating: 0,
+          duration: '',
+          contentRating: ''},
+          review:[]}
     }
   }
   componentDidMount(){
     // mount the date fetch from the specific URL
-    fetch('https://web-final-demo.azurewebsites.net/api/movie/' + this.props.routerProps.match.params.id, {
+    fetch(this.state.fetchURL, {
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json'
       })
     })
     .then(res => res.json())
-    .then(movies_comments => this.setState({movies_comments: movies_comments}));
+    .then(movieInfoReview => this.setState({movieInfoReview: movieInfoReview}));
   }
 
   render() {
     return (
       <div>
         {/* movie information section */}
-        <Paper className={this.props.classes.movieInfo} style={{ backgroundImage: `url(${this.state.movies_comments.movie.image})` }}>
+        <Paper className={this.props.classes.movieInfo} style={{ backgroundImage: `url(${this.state.movieInfoReview.movie.image})` }}>
           {/* Increase the priority of the hero background image */}
           <div className={this.props.classes.overlay} />
           <Grid container>
             <Grid item md={6}>
               <div className={this.props.classes.movieInfoContent}>
                 <Typography align='left' component="h1" variant="h3" color="inherit" gutterBottom>
-                  {this.props.movieInfo.name}
+                  {this.state.movieInfoReview.movie.name}
                 </Typography>
                 <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Genre:  ' + this.props.movieInfo.genre.join(', ')}
+                  {'Genre:  ' + this.state.movieInfoReview.movie.genre.join(', ')}
                 </Typography>
                 <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Actors:  ' + this.props.movieInfo.actor.join(', ')}
+                  {'Actors:  ' + this.state.movieInfoReview.movie.actor.join(', ')}
                 </Typography>
                 <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Directors:  ' + this.props.movieInfo.director.join(', ')}
+                  {'Directors:  ' + this.state.movieInfoReview.movie.director.join(', ')}
                 </Typography>
                 <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'PublishedDate:  ' + this.props.movieInfo.datePublished}
+                  {'PublishedDate:  ' + this.state.movieInfoReview.movie.datePublished}
                 </Typography>
                 <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {this.props.movieInfo.description}
+                  {this.state.movieInfoReview.movie.description}
                 </Typography>
                 <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Rate:  ' + this.props.movieInfo.rating}
+                  {'Rate:  ' + this.state.movieInfoReview.movie.rating}
                 </Typography>
               </div>
             </Grid>
@@ -109,7 +122,7 @@ class MovieDetail extends React.Component{
           <Grid container>
             <Grid item md={12}>
               <List className={this.props.classes.root}>
-                {this.props.movieInfo.review.map((r) => {
+                {this.state.movieInfoReview.review.map((r) => {
                   return (
                     <div key={r.userName}>
                       <ListItem alignItems='flex-start'>
