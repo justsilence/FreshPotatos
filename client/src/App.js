@@ -9,13 +9,17 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
-const mainFeaturedPost = {
-  title: 'Title of a longer featured blog post',
-  description:
-    "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
+const movieInfo = {
+  name: 'name',
   image: 'https://images-na.ssl-images-amazon.com/images/I/613nOicuzxL._SL1000_.jpg',
-  imgText: 'main image description',
-  linkText: 'Continue reading…',
+  genre: ['genre'],
+  actor: ['actor'],
+  director: ['director'],
+  description: 'description',
+  datePublished: 'datePublished',
+  rating: 5,
+  duration: 'duration',
+  trailer: 'trailer'
 };
 
 function App() {
@@ -25,7 +29,7 @@ function App() {
         <Navbar/>
         <Switch>
           <Route exact path="/" component={Home}/>
-          <Route path="/detail" component={() => <MovieDetail post={mainFeaturedPost} />} />
+          <Route path="/detail" component={() => <MovieDetail movieInfo={movieInfo} />} />
           <Route path="/list" component={() => <MovieList  texts={['movie1', 'movie2', 'movie3', 'for the sake of demo, dummy movies are there']} />}/>
           <Route path="/modify" component={MovieModify}/>
           <Route path="/login" component={Login}/>
