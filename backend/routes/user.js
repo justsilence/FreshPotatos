@@ -4,6 +4,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
+const Review = require('../models/review');
 var passport = require('passport');
 
 require('../config/passport')(passport);
@@ -52,24 +53,63 @@ router.post('/login', (req, res, next) => {
                 User.findOne({
                     email: req.body.email
                 }).then(user => {
-                const token = jwt.sign(
-                    { 
-                        userId: user._id,
-                        email: user.email
-                    }, 
-                    process.env.SECRET_KEY,
-                    { expiresIn: "1h" }
-                );
-                res.status(200).send({
-                    auth: true,
-                    token: token,
-                    message: 'user found & logged in',
-                });
+                    const token = jwt.sign(
+                        { 
+                            userId: user._id,
+                            email: user.email
+                        }, 
+                        process.env.SECRET_KEY,
+                        { expiresIn: "1h" }
+                    );
+                    res.status(200).send({
+                        auth: true,
+                        user_id: user._id,
+                        email: user.email,
+                        name: user.name,
+                        token: 'JWT ' + token,
+                        message: 'user found & logged in',
+                    });
                 });
             });
         }
     })(req, res, next);
 })
+
+router.get('/profile', passport.authenticate('jwt'), (req, res, next) => {
+    const user_id = req.body._id;
+    Review.find({user_id: user_id}).then(reviews => {
+        res.json({
+            message: "access profile success!",
+            reviews: reviews
+        });
+    });
+});
+
+router.get('/auth/github',
+  passport.authenticate('login.github', { scope: [ 'user:email' ] }));
+
+router.get('/auth/github/callback', 
+  passport.authenticate('login.github', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.status(200).json({
+        message: "Github OAuth success!"
+    });
+  });
+
+// router.get('/auth/twitter', passport.authenticate('twitter.login'));
+
+// router.get('/auth/twitter/callback', passport.authenticate)
+
+// app.get('/auth/twitter/callback', 
+//   passport.authenticate('twitter', { failureRedirect: '/login' }),
+//   function(req, res) {
+//     // Successful authentication, redirect home.
+//     res.redirect('/');
+//   });
+
+// app.get('/auth/twitter',
+//   passport.authenticate('twitter'));
 
 // router.post('/signup', (req, res, next) => {
 //     bcrypt.hash(req.body.password, 10).then(hashedPassword => {

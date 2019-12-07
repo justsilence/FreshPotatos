@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
+const Movie = require('../models/movie');
 
 //
 router.get('/', (req, res) => {
-    res.send({'success': "post test"})
-})
+    Movie.find({}).then(movies => {
+        res.json(movies);
+    });
+});
 
 router.post('/', (req, res) => {
     var body = req.body;

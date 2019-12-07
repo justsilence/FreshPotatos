@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Review = require('../models/review');
+const passport = require('passport');
+const User = require('../models/user');
+require('../config/passport')(passport);
 
 
 router.get('/', (req, res, next) => {
@@ -12,7 +15,8 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.post('/', (req, res, next) => {
+
+router.post('/', passport.authenticate('jwt'), (req, res, next) => {
     const review = new Review({
         title: req.body.title,
         content: req.body.content,

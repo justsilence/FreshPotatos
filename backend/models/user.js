@@ -18,14 +18,8 @@ const userSchema = new Schema({
         maxlength: 64
     },
     isAdmin: Boolean,
-    review: [
-        {
-            review_id: {
-                type: Schema.Types.ObjectId,
-                ref: 'review'
-            }
-        }
-    ]
+    githubId: String,
+    googleId: String,
 });
 
 module.exports = mongoose.model("User", userSchema);

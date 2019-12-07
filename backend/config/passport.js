@@ -2,12 +2,15 @@ const bcrypt = require('bcrypt');
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
+const GitHubStrategy = require('passport-github2').Strategy;
 const User = require('../models/user');
 const JWTStrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
 
 const dotenv = require('dotenv');
 dotenv.config();
+
 
 module.exports = (passport) => {
     passport.serializeUser((user, done) => {
@@ -74,6 +77,37 @@ module.exports = (passport) => {
             return done(null, false, {message: 'Something went wrong with signin.'});
         });
     }));
+
+    /**
+     * TODO
+     * @twitter oauth
+     */
+
+    // passport.use('twitter.login', new TwitterStrategy({
+    //     consumerKey: process.env.TWITTER_CONSUMER_KEY,
+    //     consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+    //     callbackURL: "http://127.0.0.1:3000/auth/twitter/callback"
+    //   },
+    //   function(token, tokenSecret, profile, cb) {
+    //     User.findOrCreate({ twitterId: profile.id }, function (err, user) {
+    //       return cb(err, user);
+    //     });
+    //   }
+    // ));
+
+    // Github OAuth
+    passport.use('login.github', new GitHubStrategy({
+        clientID: process.env.GITHUB_CLIENT_ID,
+        clientSecret: process.env.GITHUB_CLIENT_SECRET,
+        callbackURL: "http://localhost:3001/auth/github/callback"
+      },
+      function(accessToken, refreshToken, profile, done) {
+        User.findOrCreate({ githubId: profile.id }, function (err, user) {
+            console.log(profile);
+          return done(err, user);
+        });
+      }
+    ));
 
     const dotenv = require('dotenv');
     dotenv.config();
