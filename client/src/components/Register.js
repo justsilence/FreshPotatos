@@ -40,102 +40,128 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function Register() {
-  const classes = useStyles();
-  const [email, setEmail] = React.useState();
-  const handleChangeEmail = event => { setEmail(event.target.value); };
-  const [password, setPassword] = React.useState();
-  const handleChangePassword = event => { setPassword(event.target.value); };
+// function to check login
+const login = function(e, email, password) {
+  e.preventDefault();
+  const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+  if (email === undefined || password === undefined) {
+    window.alert("Please provide valid email or password");
+  } else if (email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+    fetch(proxyUrl+'https://project3b-kam455.glitch.me/api/brand/microsoft', {
+      method: 'GET',
+      // body: JSON.stringify({'email': email, 'password': password}),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    }).then(res => res.json())
+    .catch(error => console.error('Error:', error))
+    .then(response => console.log('Success:', response));
+  } else {
+    window.alert('invalid email');
+  }
+}
 
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.icon}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h4">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            value={email}
-            onChange={handleChangeEmail}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Email />
-                </InputAdornment>
-              ),
-            }}
-            type='email'
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="password"
-            label="Password"
-            name="password"
-            value={password}
-            onChange={handleChangePassword}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Password />
-                </InputAdornment>
-              ),
-            }}
-            type="password"
-            autoComplete="current-password"
-          />
-          <Grid container>
-            <Grid item xs className={classes.grid}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (email == undefined) {
-                    window.alert("email is empty, please input email");
-                  } else if (email.match(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-                    window.alert(email);
-                  } else {
-                    window.alert('invalid email');
-                  }
-                }}
-              >
-                Sign In
-              </Button>
+// Register component
+class Register extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      email: '',
+      password: '',
+    };
+    this.handleChangeEmail = this.handleChangeEmail.bind(this);
+    this.handleChangePassword = this.handleChangePassword.bind(this);
+  }
+  handleChangeEmail(event) { this.setState({email: event.target.value}); }
+  handleChangePassword(event) { this.setState({password: event.target.value}); }
+
+  render(){
+    return (
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={this.props.classes.paper}>
+          <Avatar className={this.props.classes.icon}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h4">
+            Sign in
+          </Typography>
+          <form className={this.props.classes.form} noValidate>
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="Email Address"
+              name="email"
+              value={this.state.email}
+              onChange={this.handleChangeEmail}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Email />
+                  </InputAdornment>
+                ),
+              }}
+              type='email'
+              autoComplete="email"
+              autoFocus
+            />
+            <TextField
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="password"
+              label="Password"
+              name="password"
+              value={this.state.password}
+              onChange={this.handleChangePassword}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Password />
+                  </InputAdornment>
+                ),
+              }}
+              type="password"
+              autoComplete="current-password"
+            />
+            <Grid container>
+              <Grid item xs className={this.props.classes.grid}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={this.props.classes.submit}
+                  onClick={(e) => {login(e, this.state.email, this.state.password)}}
+                >
+                  Sign In
+                </Button>
+              </Grid>
+              <Grid item xs className={this.props.classes.grid}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  className={this.props.classes.submit}
+                  onClick={(e) => { e.preventDefault(); window.alert(this.state.password); }}
+                >
+                  Sign Up
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs className={classes.grid}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                className={classes.submit}
-                onClick={(e) => { e.preventDefault(); window.alert(password); }}
-              >
-                Sign Up
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
-  );
+          </form>
+        </div>
+      </Container>
+    );
+  }
+}
+
+export default function Hook() {
+  const classes = useStyles();
+  return <Register classes={classes}>Hook</Register>;
 }
