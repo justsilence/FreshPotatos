@@ -12,8 +12,6 @@ import Typography from '@material-ui/core/Typography';
 import UpdateIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MovieIcon from '@material-ui/icons/Movie';
-import { useAuth } from "../context/auth";
-
 
 // self defined styles
 const useStyles = makeStyles(theme => ({
@@ -39,20 +37,35 @@ class MovieList extends React.Component{
 
   componentDidMount(){
     // mount the date fetch from the specific URL
-    fetch(this.props.fetchURL, {
-      method: 'GET',
-      headers: new Headers({
-        'Content-Type': 'application/json'
+    var fetchURL = '';
+    if (this.props.routerProps.fetchURL){
+      fetchURL = this.props.routerProps.fetchURL;
+      fetch(fetchURL, {
+        method: 'GET',
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
       })
-    })
-    .then(res => res.json())
-    .then(res => res['movies'])
-    .then(movies => movies.map((movie) => {return {'name': movie.name, 'id': movie._id}}))
-    .then(movies => this.setState({movies: movies}));
+      .then(res => res.json())
+      .then(res => res['movies'])
+      .then(movies => movies.map((movie) => {return {'name': movie.name, 'id': movie._id}}))
+      .then(movies => this.setState({movies: movies}));
+    }else{
+      fetchURL = 'https://web-final-demo.azurewebsites.net/api/movie/search' + this.props.routerProps.location.search;
+      fetch(fetchURL, {
+        method: 'GET',
+        headers: new Headers({
+          'Content-Type': 'application/json'
+        })
+      })
+      .then(res => res.json())
+      .then(res => res['result'])
+      .then(movies => movies.map((movie) => {return {'name': movie.name, 'id': movie._id}}))
+      .then(movies => this.setState({movies: movies}));
+    }
   }
 
   render(){
-    console.log(authTokens);
     return (
       <div className={this.props.classes.root}>
         <Grid container spacing={2}>
@@ -91,6 +104,5 @@ class MovieList extends React.Component{
 
 export default function Hook(props) {
   const classes = useStyles();
-  const { authTokens } = useAuth();
-  return <MovieList classes={classes} authTokens={authTokens} fetchURL={props.fetchURL}>Hook</MovieList>;
+  return <MovieList classes={classes} routerProps={props}>Hook</MovieList>;  
 }

@@ -24,7 +24,8 @@ function App(props) {
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route path="/detail/:id" component={MovieDetail} />
-          <Route path="/list" component={() => <MovieList fetchURL='https://web-final-demo.azurewebsites.net/api/index'/>}/>
+          <Route path='/list' component={() => <MovieList fetchURL='https://web-final-demo.azurewebsites.net/api/index'/>}/>
+          <Route path='/search' component={MovieList}/>
           <Route path="/modify" component={MovieModify}/>
           <Route path="/login" component={Login}/>
           <Route path="/signup" component={Signup}/>

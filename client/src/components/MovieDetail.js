@@ -13,7 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(theme => ({
   movieInfo: {
-    height: 500,
+    height: 800,
     position: 'relative',
     backgroundColor: theme.palette.grey[800],
     color: theme.palette.common.white,
