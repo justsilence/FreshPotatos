@@ -9,7 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import UpdateIcon from '@material-ui/icons/Update';
+import UpdateIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import MovieIcon from '@material-ui/icons/Movie';
 
@@ -28,6 +28,19 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+// get all movies
+const proxyUrl = "https://cors-anywhere.herokuapp.com/";
+const defaultMovieList = () => {
+  fetch(proxyUrl+'https://web-final-260021.appspot.com/api/index', {
+    method: 'GET',
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  }).then(res => res.json())
+  .catch(error => console.error('Error:', error))
+}
+
+
 export default function MovieList(props) {
   const classes = useStyles();
   return (
@@ -40,7 +53,7 @@ export default function MovieList(props) {
           <div className={classes.demo}>
             <List>
               {props.texts.map(text => (
-                <ListItem>
+                <ListItem key={text}>
                   <ListItemAvatar>
                     <Avatar>
                       <MovieIcon />

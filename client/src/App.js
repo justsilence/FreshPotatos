@@ -40,6 +40,8 @@ const movieInfo = {
   },]
 };
 
+const moviesList = ['movie1', 'movie2', 'movie3', 'for the sake of demo, dummy movies are there']
+
 function App() {
   return (
     <BrowserRouter>
@@ -48,7 +50,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home}/>
           <Route path="/detail" component={() => <MovieDetail movieInfo={movieInfo} />} />
-          <Route path="/list" component={() => <MovieList  texts={['movie1', 'movie2', 'movie3', 'for the sake of demo, dummy movies are there']} />}/>
+          <Route path="/list" component={() => <MovieList  texts={moviesList} />}/>
           <Route path="/modify" component={MovieModify}/>
           <Route path="/login" component={Login}/>
           <Route path="/signup" component={Signup}/>
