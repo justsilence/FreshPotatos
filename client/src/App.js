@@ -5,7 +5,8 @@ import Navbar from './components/Navbar';
 import MovieList from './components/MovieList';
 import MovieDetail from './components/MovieDetail';
 import MovieModify from './components/MovieModify';
-import Register from './components/Register';
+import Login from './components/Login';
+import Signup from './components/Signup';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 
 const mainFeaturedPost = {
@@ -27,7 +28,8 @@ function App() {
           <Route path="/detail" component={() => <MovieDetail post={mainFeaturedPost} />} />
           <Route path="/list" component={() => <MovieList  texts={['movie1', 'movie2', 'movie3', 'for the sake of demo, dummy movies are there']} />}/>
           <Route path="/modify" component={MovieModify}/>
-          <Route path="/register" component={Register}/>
+          <Route path="/login" component={Login}/>
+          <Route path="/signup" component={Signup}/>
         </Switch>
       </div>
       </BrowserRouter>

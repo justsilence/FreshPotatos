@@ -61,8 +61,8 @@ const login = function(e, email, password) {
   }
 }
 
-// Register component
-class Register extends React.Component{
+// Login component
+class Login extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
@@ -148,7 +148,7 @@ class Register extends React.Component{
                   variant="contained"
                   color="primary"
                   className={this.props.classes.submit}
-                  onClick={(e) => { e.preventDefault(); window.alert(this.state.password); }}
+                  href='/detail'
                 >
                   Sign Up
                 </Button>
@@ -163,5 +163,5 @@ class Register extends React.Component{
 
 export default function Hook() {
   const classes = useStyles();
-  return <Register classes={classes}>Hook</Register>;
+  return <Login classes={classes}>Hook</Login>;
 }
