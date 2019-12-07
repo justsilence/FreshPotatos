@@ -14,11 +14,15 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
+import Button from '@material-ui/core/Button';
 
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import SendIcon from '@material-ui/icons/Send';
 import {NavLink} from 'react-router-dom';
+
+import { useAuth } from "../context/auth";
+import { Route, Redirect } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -91,7 +95,21 @@ const useStyles = makeStyles(theme => ({
   // },
 }));
 
-export default function Navbar() {
+const buttonStyle = {
+  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  borderRadius: 3,
+  border: 0,
+  color: 'white',
+  height: 48,
+  padding: '0 30px',
+  boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+};
+
+
+export default function Navbar({ component: Component, ...rest }) {
+  const { authTokens } = useAuth();
+  
+  
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -137,22 +155,21 @@ export default function Navbar() {
         onClose={handleNavMenuClose}
       >
         <MenuItem>
-          <ListItemIcon>
-            <SendIcon fontSize="small" />
-          </ListItemIcon>
-          <NavLink exact to="/">Home</NavLink>
+        <Button style = {buttonStyle}  onClick={event =>  window.location.href='/'}>
+         Home
+          </Button>
+
         </MenuItem>
         <MenuItem>
-          <ListItemIcon>
-            <SendIcon fontSize="small" />
-          </ListItemIcon>
-          <NavLink exact to="/list">List</NavLink>
+        <Button style = {buttonStyle}  onClick={event =>  window.location.href='/list'}>
+         List
+          </Button>
+
         </MenuItem>
         <MenuItem>
-          <ListItemIcon>
-            <SendIcon fontSize="small" />
-          </ListItemIcon>
-          <NavLink exact to="/detail">Detail</NavLink>
+        <Button style = {buttonStyle}  onClick={event =>  window.location.href='/detail'}>
+         Detail
+          </Button>
         </MenuItem>
       </Menu>
     
@@ -160,19 +177,38 @@ export default function Navbar() {
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
-    <Menu
-      anchorEl={anchorEl}
-      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={menuId}
-      keepMounted
-      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-      open={isMenuOpen}
-      onClose={handleMenuClose}
-    >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-    </Menu>
+
+      <Menu
+        anchorEl={anchorEl}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        id={menuId}
+        keepMounted
+        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+        open={isMenuOpen}
+        onClose={handleMenuClose}
+      >
+        {/* <MenuItem onClick={handleMenuClose}>Profile</MenuItem> */}
+        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      </Menu>
+    
   );
+    
+    // <Menu
+    //     anchorEl={anchorEl}
+    //     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+    //     id={menuId}
+    //     keepMounted
+    //     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+    //     open={isMenuOpen}
+    //     onClose={handleMenuClose}
+    //   >
+    //     {/* <MenuItem onClick={handleMenuClose}>Profile</MenuItem> */}
+    //     <MenuItem ><NavLink exact to="/Login">Login</NavLink></MenuItem>
+    //   </Menu>
+  
+  
+
+  
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
@@ -185,14 +221,14 @@ export default function Navbar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      {/* <MenuItem>
         <IconButton aria-label="show 4 new mails" color="inherit">
           <Badge badgeContent={4} color="secondary">
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
-      </MenuItem>
+      </MenuItem> */}
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
           <Badge badgeContent={11} color="secondary">
@@ -245,14 +281,14 @@ export default function Navbar() {
             />
           </div>
           <div className={classes.grow} />
-          <div className={classes.sectionDesktop}>
+          {authTokens ? (<div className={classes.sectionDesktop} >
             <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={4} color="secondary">
+              <Badge badgeContent={0} color="secondary">
                 <MailIcon />
               </Badge>
             </IconButton>
             <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={17} color="secondary">
+              <Badge badgeContent={0} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -266,7 +302,12 @@ export default function Navbar() {
             >
               <AccountCircle />
             </IconButton>
-          </div>
+          </div>):(
+          <Button style = {buttonStyle}  onClick={event =>  window.location.href='/login'}>
+          LogIn/SignUp
+          </Button>
+          )} 
+          
           <div className={classes.sectionMobile}>
             <IconButton
               aria-label="show more"
@@ -283,6 +324,7 @@ export default function Navbar() {
       {renderMobileMenu}
       {renderMenu}
       {renderNavMenu}
+     
     </div>
   );
 }
