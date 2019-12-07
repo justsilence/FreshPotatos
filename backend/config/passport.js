@@ -4,6 +4,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const TwitterStrategy = require('passport-twitter').Strategy;
 const GitHubStrategy = require('passport-github2').Strategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../models/user');
 const JWTStrategy = require('passport-jwt').Strategy;
 const ExtractJWT = require('passport-jwt').ExtractJwt;
@@ -96,17 +97,66 @@ module.exports = (passport) => {
     // ));
 
     // Github OAuth
-    passport.use('login.github', new GitHubStrategy({
+    passport.use(new GitHubStrategy({
         clientID: process.env.GITHUB_CLIENT_ID,
         clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        callbackURL: "http://localhost:3001/auth/github/callback"
+        callbackURL: "http://localhost:3001/api/user/auth/github/callback"
       },
-      function(accessToken, refreshToken, profile, done) {
-        User.findOrCreate({ githubId: profile.id }, function (err, user) {
-            console.log(profile);
-          return done(err, user);
+      function(accessToken, refreshToken, profile, cb) {
+        console.log(profile);
+        User.findOne({ "github.id": profile.id }, (err, user) => {
+            if (!user) {
+                const encryptedPassword = encryptPassword(profile.id);
+                const user = new User({
+                    email: "43418762+justsilence@users.noreply.github.com",
+                    password: encryptedPassword,
+                    github: {
+                        id: profile.id,
+                        token: accessToken
+                    },
+                    isAdmin: false
+                });
+                user.save().then(err => {
+                    console.log(err);
+                    return cb(err, user);
+                });
+            } else {
+                return cb(err, user);
+            }
         });
-      }
+    }
+    ));
+
+    // Google OAuth
+    passport.use(new GoogleStrategy({
+            clientID: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            callbackURL: "http://localhost:3001/api/user/auth/google/callback"
+        },
+        function(accessToken, refreshToken, profile, cb) {
+            console.log(profile);
+            User.findOne({ "google.id": profile.id }, (err, user) => {
+                if (!user) {
+                    const encryptedPassword = profile.id;
+                    const user = new User({
+                        name: profile.displayName,
+                        email: profile.emails[0].value,
+                        password: encryptedPassword,
+                        google: {
+                            id: profile.id,
+                            token: accessToken
+                        },
+                        isAdmin: false
+                    });
+                    user.save().then(err => {
+                        console.log(err);
+                        return cb(err, user);
+                    });
+                } else {
+                    return cb(err, user);
+                }
+            });
+        }
     ));
 
     const dotenv = require('dotenv');

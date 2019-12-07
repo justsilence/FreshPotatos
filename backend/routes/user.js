@@ -86,16 +86,34 @@ router.get('/profile', passport.authenticate('jwt'), (req, res, next) => {
 });
 
 router.get('/auth/github',
-  passport.authenticate('login.github', { scope: [ 'user:email' ] }));
+  passport.authenticate('github', { scope: [ 'user:email' ] }));
 
 router.get('/auth/github/callback', 
-  passport.authenticate('login.github', { failureRedirect: '/login' }),
-  function(req, res) {
+  passport.authenticate('github', { failureRedirect: '/' }),
+  (req, res) => {
     // Successful authentication, redirect home.
     res.status(200).json({
         message: "Github OAuth success!"
     });
   });
+
+router.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+router.get('/auth/google/callback', 
+  passport.authenticate('google'),
+  (req, res) => {
+      res.json({
+          message: "success"
+      })
+  });
+
+router.get('/success', (req, res, next) => {
+    res.json({
+        message: "success"
+    });
+});
+
 
 // router.get('/auth/twitter', passport.authenticate('twitter.login'));
 

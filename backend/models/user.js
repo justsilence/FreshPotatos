@@ -18,8 +18,18 @@ const userSchema = new Schema({
         maxlength: 64
     },
     isAdmin: Boolean,
-    githubId: String,
-    googleId: String,
+    github: {
+        type: {
+            id: String, 
+            token: String
+        }
+    },
+    google: {
+        type: {
+            id: String,
+            token: String
+        }
+    }
 });
 
 module.exports = mongoose.model("User", userSchema);

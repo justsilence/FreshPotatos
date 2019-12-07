@@ -54,7 +54,7 @@ app.use((req, res, next) => {
     'Access-Control-Allow-Headers',
     'Origin, X-Requested-With, Content-Type, Accept, Authorization'
   );
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
   next();
 });
 
@@ -62,6 +62,12 @@ app.use('/api/index', indexRouter);
 app.use('/api/user', userRouter);
 app.use('/api/review', reviewRouter);
 app.use('/api/movie', movieRouter);
+
+app.get('/', (req, res, next) => {
+  res.status(200).json({
+    message: "welcome!"
+  });
+});
 
 // listen for requests :)
 const listener = app.listen(process.env.PORT, function() {
