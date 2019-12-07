@@ -67,13 +67,19 @@ router.post('/login', (req, res, next) => {
                         email: user.email,
                         name: user.name,
                         token: 'JWT ' + token,
-                        message: 'user found & logged in',
+                        message: 'success',
                     });
                 });
             });
         }
     })(req, res, next);
-})
+});
+
+// router.post('/reset_password', passport.authenticate('jwt'), (req, res, next) => {
+//     const old_password = req.params.old_password;
+//     const new_password = req.params.new_password;
+
+// });
 
 router.get('/profile', passport.authenticate('jwt'), (req, res, next) => {
     const user_id = req.body._id;
@@ -100,18 +106,23 @@ router.get('/auth/github/callback',
 router.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
 
-router.get('/auth/google/callback', 
-  passport.authenticate('google'),
-  (req, res) => {
-      res.json({
-          message: "success"
-      })
-  });
-
-router.get('/success', (req, res, next) => {
-    res.json({
-        message: "success"
-    });
+router.get('/auth/google/callback', passport.authenticate('google'), (req, res, next) => {
+    const token = jwt.sign(
+        {
+            userId: req.user._id,
+            email: req.user.email
+        },
+        process.env.SECRET_KEY,
+        { expiresIn: "1h" }
+    );
+    res.status(200).json({
+        auth: true,
+        user_id: req.user._id,
+        email: req.user.email,
+        name: req.user.name,
+        token: 'JWT ' + token,
+        message: 'google oauth success',
+    })
 });
 
 

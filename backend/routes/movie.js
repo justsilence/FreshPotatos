@@ -8,6 +8,31 @@ const User = require('../models/user')
 
 require('../config/passport')(passport);
 
+// GET /api/movie/search?name=sdasd
+router.get('/search', (req, res, next) => {
+    const genre = req.query.genre;
+    console.log(genre);
+    const name = req.query.name;
+    console.log(name);
+    const result = {}
+
+    if (genre) {
+        Movie.find({genre: { $regex : new RegExp(genre, "i") }}).then(movies => {
+            res.status(200).json({
+                message: "success",
+                result: movies
+            });
+        });
+    } else if (name) {
+        Movie.find({name: { $regex : new RegExp(name, "i") }}).then(movies => {
+            res.status(200).json({
+                message: "success",
+                result: movies
+            });
+        });
+    }
+})
+
 router.get('/:id', (req, res, next) => {
     const id = req.params.id;
     Movie.findById(id).then(movie => {
@@ -26,12 +51,12 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-router.post('/', passport.authenticate('jwt'), (req, res, next) => {
+router.post('/:id', passport.authenticate('jwt'), (req, res, next) => {
     const review = new Review({
         title: req.body.title,
         content: req.body.content,
         user_id: req.body.user_id,
-        movie_id: req.body.movie_id
+        movie_id: req.params.id
     });
     review.save().then(createdReview => {
         res.status(201).json({
@@ -46,7 +71,7 @@ router.put('/:id', passport.authenticate('jwt'), (req, res, next) => {
         title: req.body.title,
         content: req.body.content,
     };
-    
+
     Review.findByIdAndUpdate(req.params.id, review, {new: true}).then(result => {
         res.status(200).json({
             message: "Update review successful!",
@@ -66,6 +91,8 @@ router.delete('/:id', passport.authenticate('jwt'), (req, res, next) => {
         });
     });
 });
+
+
 
 
 module.exports = router;
