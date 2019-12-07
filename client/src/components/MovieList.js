@@ -28,52 +28,66 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-// get all movies
-const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-const defaultMovieList = () => {
-  fetch(proxyUrl+'https://web-final-260021.appspot.com/api/index', {
-    method: 'GET',
-    headers: new Headers({
-      'Content-Type': 'application/json'
+class MovieList extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      movies: []
+    }
+  }
+
+  componentDidMount(){
+    // mount the date fetch from the specific URL
+    fetch(this.props.fetchURL, {
+      method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
     })
-  }).then(res => res.json())
-  .catch(error => console.error('Error:', error))
+    .then(res => res.json())
+    .then(res => res['movies'])
+    .then(movies => movies.map((movie) => {return {'name': movie.name, 'id': movie._id}}))
+    .then(movies => this.setState({movies: movies}));
+  }
+
+  render(){
+    return (
+      <div className={this.props.classes.root}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={12}>
+            <Typography variant="h6" className={this.props.classes.title}>
+              Movie List
+            </Typography>
+            <div className={this.props.classes.demo}>
+              <List>
+                {this.state.movies.map(movie => (
+                  <ListItem key={movie.id}>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <MovieIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={movie.name} />
+                    <ListItemSecondaryAction>
+                      <IconButton href={'/detail?id='+ movie.id} edge="start" aria-label="update">
+                        <UpdateIcon />
+                      </IconButton>
+                      <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </div>
+          </Grid>
+        </Grid>
+      </div>
+    );
+  }
 }
 
-
-export default function MovieList(props) {
+export default function Hook(props) {
   const classes = useStyles();
-  return (
-    <div className={classes.root}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={12}>
-          <Typography variant="h6" className={classes.title}>
-            Movie List
-          </Typography>
-          <div className={classes.demo}>
-            <List>
-              {props.texts.map(text => (
-                <ListItem key={text}>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <MovieIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText primary={text} />
-                  <ListItemSecondaryAction>
-                    <IconButton onClick={() => {window.alert("update")}} edge="start" aria-label="update">
-                      <UpdateIcon />
-                    </IconButton>
-                    <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          </div>
-        </Grid>
-      </Grid>
-    </div>
-  );
+  return <MovieList classes={classes} fetchURL={props.fetchURL}>Hook</MovieList>;
 }

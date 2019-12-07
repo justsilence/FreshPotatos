@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -50,91 +49,111 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function MovieDetail(props) {
-  const classes = useStyles();
-  const { movieInfo } = props;
 
-  return (
-    <div>
-      {/* movie information section */}
-      <Paper className={classes.movieInfo} style={{ backgroundImage: `url(${movieInfo.image})` }}>
-        {/* Increase the priority of the hero background image */}
-        <div className={classes.overlay} />
-        <Grid container>
-          <Grid item md={6}>
-            <div className={classes.movieInfoContent}>
-              <Typography align='left' component="h1" variant="h3" color="inherit" gutterBottom>
-                {movieInfo.name}
-              </Typography>
-              <Typography align='left' variant="subtitle" color="inherit" paragraph>
-                {'Genre:  ' + movieInfo.genre.join(', ')}
-              </Typography>
-              <Typography align='left' variant="subtitle" color="inherit" paragraph>
-                {'Actors:  ' + movieInfo.actor.join(', ')}
-              </Typography>
-              <Typography align='left' variant="subtitle" color="inherit" paragraph>
-                {'Directors:  ' + movieInfo.director.join(', ')}
-              </Typography>
-              <Typography align='left' variant="subtitle" color="inherit" paragraph>
-                {'PublishedDate:  ' + movieInfo.datePublished}
-              </Typography>
-              <Typography align='left' variant="subtitle" color="inherit" paragraph>
-                {movieInfo.description}
-              </Typography>
-              <Typography align='left' variant="subtitle" color="inherit" paragraph>
-                {'Rate:  ' + movieInfo.rating}
-              </Typography>
-            </div>
+class MovieDetail extends React.Component{
+  constructor(props) {
+    super(props);
+    this.state = {
+      movies_comments: {}
+    }
+  }
+  componentDidMount(){
+    // mount the date fetch from the specific URL
+    fetch('https://web-final-demo.azurewebsites.net/api/movie/' + this.props.routerProps.match.params.id, {
+      method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
+    .then(res => res.json())
+    .then(movies_comments => this.setState({movies_comments: movies_comments}));
+  }
+
+  render() {
+    return (
+      <div>
+        {/* movie information section */}
+        <Paper className={this.props.classes.movieInfo} style={{ backgroundImage: `url(${this.state.movies_comments.movie.image})` }}>
+          {/* Increase the priority of the hero background image */}
+          <div className={this.props.classes.overlay} />
+          <Grid container>
+            <Grid item md={6}>
+              <div className={this.props.classes.movieInfoContent}>
+                <Typography align='left' component="h1" variant="h3" color="inherit" gutterBottom>
+                  {this.props.movieInfo.name}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {'Genre:  ' + this.props.movieInfo.genre.join(', ')}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {'Actors:  ' + this.props.movieInfo.actor.join(', ')}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {'Directors:  ' + this.props.movieInfo.director.join(', ')}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {'PublishedDate:  ' + this.props.movieInfo.datePublished}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {this.props.movieInfo.description}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {'Rate:  ' + this.props.movieInfo.rating}
+                </Typography>
+              </div>
+            </Grid>
           </Grid>
-        </Grid>
-      </Paper>
-      {/* user comments section */}
-      <Paper>
-        <Grid container>
-          <Grid item md={8}>
-            <List className={classes.root}>
-              {movieInfo.review.map((r) => {
-                return (
-                  <div>
-                    <ListItem alignItems='flex-start'>
-                      <ListItemText
-                        primary={
-                          <Typography variant='h6'>
-                            {r.title}
-                          </Typography>
-                        }
-                        secondary={
-                          <React.Fragment>
-                            <Typography
-                              component='span'
-                              variant='button'
-                              className={classes.block}
-                              color='textPrimary'
-                            >
-                            {r.userName}
+        </Paper>
+        {/* user comments section */}
+        <Paper>
+          <Grid container>
+            <Grid item md={12}>
+              <List className={this.props.classes.root}>
+                {this.props.movieInfo.review.map((r) => {
+                  return (
+                    <div key={r.userName}>
+                      <ListItem alignItems='flex-start'>
+                        <ListItemText
+                          primary={
+                            <Typography variant='h6'>
+                              {r.title}
                             </Typography>
-                            {r.content}
-                          </React.Fragment>
-                        }
-                      />
-                      <ListItemSecondaryAction>
-                        <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
-                    <Divider variant="fullWidth" component="li" />
-                  </div>
-                )
-              })}
-            </List>
+                          }
+                          secondary={
+                            <React.Fragment>
+                              <Typography
+                                component='span'
+                                variant='button'
+                                className={this.props.classes.block}
+                                color='textPrimary'
+                              >
+                              {r.userName}
+                              </Typography>
+                              {r.content}
+                            </React.Fragment>
+                          }
+                        />
+                        <ListItemSecondaryAction key='button'>
+                          <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
+                            <DeleteIcon />
+                          </IconButton>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                      <Divider variant="fullWidth" component="li" />
+                    </div>
+                  )
+                })}
+              </List>
+            </Grid>
           </Grid>
-        </Grid>
-      </Paper>
-    </div>
-  );
+        </Paper>
+      </div>
+    );
+  }
+  
 }
 
-MovieDetail.propTypes = {
-  post: PropTypes.object,
-};
+export default function Hook(props) {
+  const classes = useStyles();
+  return <MovieDetail classes={classes} routerProps={props}>Hook</MovieDetail>;
+}
