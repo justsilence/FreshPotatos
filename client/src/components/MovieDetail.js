@@ -4,12 +4,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import Divider from '@material-ui/core/Divider';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import Avatar from '@material-ui/core/Avatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 const useStyles = makeStyles(theme => ({
   movieInfo: {
@@ -41,11 +42,11 @@ const useStyles = makeStyles(theme => ({
   },
   root: {
     width: '100%',
-    maxWidth: 1200,
+    maxWidth: '100%',
     backgroundColor: theme.palette.background.paper,
   },
-  inline: {
-    display: 'inline',
+  block: {
+    display: 'block',
   },
 }));
 
@@ -65,29 +66,23 @@ export default function MovieDetail(props) {
               <Typography align='left' component="h1" variant="h3" color="inherit" gutterBottom>
                 {movieInfo.name}
               </Typography>
-              <Typography align='left' variant="h5" color="inherit" paragraph>
-                {movieInfo.genre}
+              <Typography align='left' variant="subtitle" color="inherit" paragraph>
+                {'Genre:  ' + movieInfo.genre.join(', ')}
               </Typography>
-              <Typography align='left' variant="h5" color="inherit" paragraph>
-                {movieInfo.actor}
+              <Typography align='left' variant="subtitle" color="inherit" paragraph>
+                {'Actors:  ' + movieInfo.actor.join(', ')}
               </Typography>
-              <Typography align='left' variant="h5" color="inherit" paragraph>
-                {movieInfo.director}
+              <Typography align='left' variant="subtitle" color="inherit" paragraph>
+                {'Directors:  ' + movieInfo.director.join(', ')}
               </Typography>
-              <Typography align='left' variant="h5" color="inherit" paragraph>
-                {movieInfo.datePublished}
+              <Typography align='left' variant="subtitle" color="inherit" paragraph>
+                {'PublishedDate:  ' + movieInfo.datePublished}
               </Typography>
-              <Typography align='left' variant="h5" color="inherit" paragraph>
-                {movieInfo.duration}
-              </Typography>
-              <Typography align='left' variant="h5" color="inherit" paragraph>
-                {movieInfo.trailer}
-              </Typography>
-              <Typography align='left' variant="h5" color="inherit" paragraph>
+              <Typography align='left' variant="subtitle" color="inherit" paragraph>
                 {movieInfo.description}
               </Typography>
-              <Typography align='left' variant="h5" color="inherit" paragraph>
-                {movieInfo.rating}
+              <Typography align='left' variant="subtitle" color="inherit" paragraph>
+                {'Rate:  ' + movieInfo.rating}
               </Typography>
             </div>
           </Grid>
@@ -96,74 +91,42 @@ export default function MovieDetail(props) {
       {/* user comments section */}
       <Paper>
         <Grid container>
-          <Grid item md={6}>
+          <Grid item md={8}>
             <List className={classes.root}>
-              {}
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Brunch this weekend?"
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                      >
-                        Ali Connors
-                      </Typography>
-                      {" — I'll be in your neighborhood doing errands this…"}
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Summer BBQ"
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                      >
-                        to Scott, Alex, Jennifer
-                      </Typography>
-                      {" — Wish I could come, but I'm out of town this…"}
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
-              <Divider variant="inset" component="li" />
-              <ListItem alignItems="flex-start">
-                <ListItemAvatar>
-                  <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                </ListItemAvatar>
-                <ListItemText
-                  primary="Oui Oui"
-                  secondary={
-                    <React.Fragment>
-                      <Typography
-                        component="span"
-                        variant="body2"
-                        className={classes.inline}
-                        color="textPrimary"
-                      >
-                        Sandra Adams
-                      </Typography>
-                      {' — Do you have Paris recommendations? Have you ever…'}
-                    </React.Fragment>
-                  }
-                />
-              </ListItem>
+              {movieInfo.review.map((r) => {
+                return (
+                  <div>
+                    <ListItem alignItems='flex-start'>
+                      <ListItemText
+                        primary={
+                          <Typography variant='h6'>
+                            {r.title}
+                          </Typography>
+                        }
+                        secondary={
+                          <React.Fragment>
+                            <Typography
+                              component='span'
+                              variant='button'
+                              className={classes.block}
+                              color='textPrimary'
+                            >
+                            {r.userName}
+                            </Typography>
+                            {r.content}
+                          </React.Fragment>
+                        }
+                      />
+                      <ListItemSecondaryAction>
+                        <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                    <Divider variant="fullWidth" component="li" />
+                  </div>
+                )
+              })}
             </List>
           </Grid>
         </Grid>

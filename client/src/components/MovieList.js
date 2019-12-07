@@ -39,24 +39,24 @@ export default function MovieList(props) {
           </Typography>
           <div className={classes.demo}>
             <List>
-                {props.texts.map(text => (
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <MovieIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={text} />
-                    <ListItemSecondaryAction>
-                      <IconButton onClick={() => {window.alert("update")}} edge="start" aria-label="update">
-                        <UpdateIcon />
-                      </IconButton>
-                      <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
+              {props.texts.map(text => (
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar>
+                      <MovieIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText primary={text} />
+                  <ListItemSecondaryAction>
+                    <IconButton onClick={() => {window.alert("update")}} edge="start" aria-label="update">
+                      <UpdateIcon />
+                    </IconButton>
+                    <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
             </List>
           </div>
         </Grid>
