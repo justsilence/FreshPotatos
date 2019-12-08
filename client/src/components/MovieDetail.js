@@ -112,16 +112,20 @@ class MovieDetail extends React.Component{
   }
 
   addReview(movieId, reviewTitle, reviewContent){
-    fetch('https://web-final-demo.azurewebsites.net/api/review', {
-      method: 'POST',
-      body: JSON.stringify({'title': reviewTitle, 'content': reviewContent, 'movie_id': movieId}),
-      headers: new Headers({
-        'Content-Type': 'application/json',
-        'Authorization': window.sessionStorage.getItem('token')
+    if (reviewTitle == '' || reviewContent == ''){
+      window.alert('Please input title or comment')
+    }else{
+      fetch('https://web-final-demo.azurewebsites.net/api/review', {
+        method: 'POST',
+        body: JSON.stringify({'title': reviewTitle, 'content': reviewContent, 'movie_id': movieId}),
+        headers: new Headers({
+          'Content-Type': 'application/json',
+          'Authorization': window.sessionStorage.getItem('token')
+        })
       })
-    })
-    .then(res => res.json())
-    .then(res => window.alert(res.message))
+      .then(res => res.json())
+      .then(res => {window.alert(res.message); window.location.reload(true)})
+    }
   }
 
   deleteReview(id){
