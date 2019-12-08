@@ -42,24 +42,29 @@ const useStyles = makeStyles(theme => ({
 }));
 
 // function to check login, then store `is_admin` and `token` in local storage
-const login = function(email, password) {
-  if (email === undefined || password === undefined) {
-    window.alert("Please provide valid email or password");
-  } else if (email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+function login(email, password) {
+  const emailPatternChecker = email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
+  if (email === '' || password === '') {
+    window.alert("invalid email or password");
+  } else if(emailPatternChecker) {
     fetch('https://web-final-demo.azurewebsites.net/api/user/login', {
       method: 'POST',
       body: JSON.stringify({'email': email, 'password': password}),
-      headers: new Headers({
-        'Content-Type': 'application/json'
-      })
+      headers: new Headers({ 'Content-Type': 'application/json' })
     })
     .then(res => res.json())
     .then(response => {
-      localStorage.setItem('is_admin', true);
-      localStorage.setItem('token', response.token)
+      if (response.auth){
+        localStorage.setItem('is_login', response.auth);
+        localStorage.setItem('is_admin', response.isAdmin);
+        localStorage.setItem('token', response.token);
+        window.location.href='/';
+      }else{
+        window.alert('email or password error');
+      }
     });
   } else {
-    window.alert('invalid email');
+    window.alert("Email format error");
   }
 }
 
@@ -168,63 +173,3 @@ export default function Hook(props) {
   const classes = useStyles();
   return <Login classes={classes} routerProps={props}>Hook</Login>;
 }
-
-// function Login(props) {
-//   const [isLoggedIn, setLoggedIn] = useState(false);
-//   const [isError, setIsError] = useState(false);
-//   const [userName, setUserName] = useState("");
-//   const [password, setPassword] = useState("");
-//   const { setAuthTokens } = useAuth();
-
-
-// function postLogin() {
-//   axios.post('https://web-final-demo.azurewebsites.net/api/user/login', {
-//     userName,
-//     password
-//   }).then(result => {
-//     console.log(userName);
-//     console.log(password);
-//     console.log(result);
-//     if (result.status === 200) {
-//       setAuthTokens(result.token);
-//       setLoggedIn(true);
-//     } else {
-//       setIsError(true);
-//     }
-//   }).catch(e => {
-//     setIsError(true);
-//   });
-// }
-
-// if (isLoggedIn) {
-//   return <Redirect to='/'/>;
-// }
-
-// return (
-//   <Card>
-//     <Form>
-//       <Input
-//         type="username"
-//         value={userName}
-//         onChange={e => {
-//           setUserName(e.target.value);
-//         }}
-//         placeholder="email"
-//       />
-//       <Input
-//         type="password"
-//         value={password}
-//         onChange={e => {
-//           setPassword(e.target.value);
-//         }}
-//         placeholder="password"
-//       />
-//       <Button onClick={postLogin}>Sign In</Button>
-//     </Form>
-//     <Link to="/signup">Don't have an account?</Link>
-//       { isError &&<Error>The username or password provided were incorrect!</Error> }
-//   </Card>
-// );
-// }
-
-// export default Login;

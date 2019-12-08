@@ -16,14 +16,6 @@ import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
 
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import SendIcon from '@material-ui/icons/Send';
-import {NavLink} from 'react-router-dom';
-
-import { useAuth } from "../context/auth";
-import { Route, Redirect } from "react-router-dom";
-
 const useStyles = makeStyles(theme => ({
   grow: {
     flexGrow: 1,
@@ -105,10 +97,7 @@ const buttonStyle = {
   boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
 };
 
-
 export default function Navbar({ component: Component, ...rest }) {
-  const { authTokens } = useAuth();
-  
   
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -119,59 +108,34 @@ export default function Navbar({ component: Component, ...rest }) {
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const isNavMenuOpen = Boolean(navAnchorEl);
 
-  const handleProfileMenuOpen = event => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleProfileMenuOpen = event => { setAnchorEl(event.currentTarget); };
+  const handleMobileMenuClose = () => { setMobileMoreAnchorEl(null); };
+  const handleMobileMenuOpen = event => { setMobileMoreAnchorEl(event.currentTarget); };
+  const handleMenuClose = () => { setAnchorEl(null); handleMobileMenuClose(); };
+  const handleNavMenuOpen = event => { setNavAnchorEl(event.currentTarget); };
+  const handleNavMenuClose = () => { setNavAnchorEl(null); };
+  const handleLogout = () => { localStorage.clear(); window.location.href='/login' }
 
-  const handleMobileMenuClose = () => {
-    setMobileMoreAnchorEl(null);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-    handleMobileMenuClose();
-  };
-
-  const handleMobileMenuOpen = event => {
-    setMobileMoreAnchorEl(event.currentTarget);
-  };
-
-  //added by Quan
-  const handleNavMenuOpen = event => {
-    setNavAnchorEl(event.currentTarget);
-  };
-
-  const handleNavMenuClose = () => {
-    setNavAnchorEl(null);
-  };
-
-  const navMenuId = 'primary-search-account-menu-nav';
+  // top-left menu
   const renderNavMenu = (
     <Menu
-        id={navMenuId}
-        anchorEl={navAnchorEl}
-        keepMounted
-        open={isNavMenuOpen}
-        onClose={handleNavMenuClose}
-      >
-        <MenuItem>
+      id="primary-search-account-menu-nav"
+      anchorEl={navAnchorEl}
+      keepMounted
+      open={isNavMenuOpen}
+      onClose={handleNavMenuClose}
+    >
+      <MenuItem>
         <Button style = {buttonStyle}  onClick={event =>  window.location.href='/'}>
-         Home
-          </Button>
-
-        </MenuItem>
-        <MenuItem>
+          Home
+        </Button>
+      </MenuItem>
+      <MenuItem>
         <Button style = {buttonStyle}  onClick={event =>  window.location.href='/list'}>
-         List
-          </Button>
-
-        </MenuItem>
-        <MenuItem>
-        <Button style = {buttonStyle}  onClick={event =>  window.location.href='/detail'}>
-         Detail
-          </Button>
-        </MenuItem>
-      </Menu>
+          All movies
+        </Button>
+      </MenuItem>
+    </Menu>
     
   );
 
@@ -187,24 +151,12 @@ export default function Navbar({ component: Component, ...rest }) {
         open={isMenuOpen}
         onClose={handleMenuClose}
       >
-        {/* <MenuItem onClick={handleMenuClose}>Profile</MenuItem> */}
+        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
         <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+        <MenuItem onClick={handleLogout}>Log out</MenuItem>
       </Menu>
     
   );
-    
-    // <Menu
-    //     anchorEl={anchorEl}
-    //     anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-    //     id={menuId}
-    //     keepMounted
-    //     transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-    //     open={isMenuOpen}
-    //     onClose={handleMenuClose}
-    //   >
-    //     {/* <MenuItem onClick={handleMenuClose}>Profile</MenuItem> */}
-    //     <MenuItem ><NavLink exact to="/Login">Login</NavLink></MenuItem>
-    //   </Menu>
   
   
 
@@ -212,7 +164,7 @@ export default function Navbar({ component: Component, ...rest }) {
 
   const mobileMenuId = 'primary-search-account-menu-mobile';
   const renderMobileMenu = (
-    <Menu
+  <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id={mobileMenuId}
@@ -221,14 +173,6 @@ export default function Navbar({ component: Component, ...rest }) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      {/* <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="secondary">
-            <MailIcon />
-          </Badge>
-        </IconButton>
-        <p>Messages</p>
-      </MenuItem> */}
       <MenuItem>
         <IconButton aria-label="show 11 new notifications" color="inherit">
           <Badge badgeContent={11} color="secondary">
@@ -281,50 +225,35 @@ export default function Navbar({ component: Component, ...rest }) {
             />
           </div>
           <div className={classes.grow} />
-          {authTokens ? (<div className={classes.sectionDesktop} >
-            <IconButton aria-label="show 4 new mails" color="inherit">
-              <Badge badgeContent={0} color="secondary">
-                <MailIcon />
-              </Badge>
-            </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
-              <Badge badgeContent={0} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-            <IconButton
-              edge="end"
-              aria-label="account of current user"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={handleProfileMenuOpen}
-              color="inherit"
-            >
+
+          {/* check if is login, then display different content on the top right */}
+
+          {/* desktop version */}
+          {localStorage.getItem('is_login') ? 
+          (<div className={classes.sectionDesktop} >
+            <IconButton edge="end" onClick={handleProfileMenuOpen}>
               <AccountCircle />
+              {localStorage.getItem('name')}
             </IconButton>
-          </div>):(
-          <Button style = {buttonStyle}  onClick={event =>  window.location.href='/login'}>
-          LogIn/SignUp
+          </div>):
+          (
+          <Button style = {buttonStyle} onClick={event =>  window.location.href='/login'}>
+            LogIn
           </Button>
-          )} 
-          
+          )}
+
+          {/* mobile version */}
           <div className={classes.sectionMobile}>
-            <IconButton
-              aria-label="show more"
-              aria-controls={mobileMenuId}
-              aria-haspopup="true"
-              onClick={handleMobileMenuOpen}
-              color="inherit"
-            >
+            <IconButton onClick={handleMobileMenuOpen} >
               <MoreIcon />
             </IconButton>
           </div>
+
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
       {renderNavMenu}
-     
     </div>
   );
 }

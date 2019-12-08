@@ -33,16 +33,16 @@ class Home extends Component{
               <div className="slide-container">
         <Slide {...properties}>
         <div className="each-slide">
-           <iframe width="560" height="315" src={slideIframes[0]} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+           <iframe width="560" height="315" src={slideIframes[0]} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
           </div>
           <div className="each-slide"> 
-            <iframe width="600" height="315" src={slideIframes[1]} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe width="600" height="315" src={slideIframes[1]} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
           </div>
           <div className="each-slide">            
-            <iframe width="560" height="315" src={slideIframes[2]} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe width="560" height="315" src={slideIframes[2]} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
           </div>
           <div className="each-slide">
-            <iframe width="560" height="315" src={slideIframes[3]} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe width="560" height="315" src={slideIframes[3]} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
           </div>
          
         </Slide>
