@@ -44,19 +44,37 @@ const useStyles = makeStyles(theme => ({
 // signup function
 const signup = function(e, email, password, name) {
   e.preventDefault();
-  const proxyUrl = "https://cors-anywhere.herokuapp.com/";
   if (email === undefined || password === undefined || name === undefined) {
     window.alert("Please provide valid email, password and name");
   } else if (email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
-    fetch(proxyUrl+'https://project3b-kam455.glitch.me/api/brand/microsoft', {
-      method: 'GET',
-      // body: JSON.stringify({'email': email, 'password': password}),
+    fetch('https://web-final-demo.azurewebsites.net/api/user/signup', {
+      method: 'POST',
+      body: JSON.stringify({'email': email, 'password': password, 'name': name, "isAdmin": false}),
       headers: new Headers({
         'Content-Type': 'application/json'
       })
-    }).then(res => res.json())
-    .catch(error => console.error('Error:', error))
-    .then(response => console.log('Success:', response));
+    })
+    .then(res => res.json())
+    .then(res => {
+      if (res.message === "User created"){
+        // then we do login
+        fetch('https://web-final-demo.azurewebsites.net/api/user/login', {
+          method: 'POST',
+          body: JSON.stringify({'email': email, 'password': password}),
+          headers: new Headers({ 'Content-Type': 'application/json' })
+        })
+        .then(r => r.json())
+        .then(r => {localStorage.setItem('is_login', r.auth);
+                      localStorage.setItem('is_admin', r.isAdmin);
+                      localStorage.setItem('token', r.token);
+                      localStorage.setItem('name', r.name);
+                      localStorage.setItem('email', r.email);
+                      window.location.href='/';
+                      })
+      }else{
+        window.alert(res.message);
+      }
+    });
   } else {
     window.alert('invalid email');
   }

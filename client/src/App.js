@@ -4,7 +4,6 @@ import Home from './components/Home';
 import Navbar from './components/Navbar';
 import MovieList from './components/MovieList';
 import MovieDetail from './components/MovieDetail';
-import MovieModify from './components/MovieModify';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Profile from './components/Profile';
@@ -27,7 +26,6 @@ function App(props) {
           <Route path="/detail/:id" component={MovieDetail} />
           <Route path='/list' component={() => <MovieList fetchURL='https://web-final-demo.azurewebsites.net/api/index'/>}/>
           <Route path='/search' component={MovieList}/>
-          <Route path="/modify" component={MovieModify}/>
           <Route path="/login" component={Login}/>
           <Route path="/signup" component={Signup}/>
           <Route path="/profile" component={Profile}/>
