@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     bottom: 0,
     right: 0,
     left: 0,
-    backgroundColor: 'rgba(0,0,0,.7)',
+    backgroundColor: 'rgba(0,0,0,.8)',
   },
   movieInfoContent: {
     position: 'relative',
@@ -149,7 +149,7 @@ class MovieDetail extends React.Component{
           <Grid container>
             <Grid item md={12}>
               <Typography variant='h4'>
-                Reviews:
+                Reviews
               </Typography>
               <List className={this.props.classes.root}>
                 {this.state.movieInfoReview.review.map((r) => {

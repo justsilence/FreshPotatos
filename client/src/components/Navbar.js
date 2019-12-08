@@ -14,6 +14,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 
 const useStyles = makeStyles(theme => ({
   grow: {
@@ -37,28 +38,24 @@ const useStyles = makeStyles(theme => ({
     },
     marginRight: theme.spacing(2),
     marginLeft: 0,
-    width: '100%',
     [theme.breakpoints.up('sm')]: {
       marginLeft: theme.spacing(3),
       width: 'auto',
     },
+    maxHeight: theme.spacing(5),
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
   },
   searchIcon: {
-    width: theme.spacing(7),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
+    padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  inputRoot: {
-    color: 'inherit',
-  },
   inputInput: {
-    padding: theme.spacing(1, 1, 1, 7),
+    flex: 1,
+    marginLeft: theme.spacing(1),
     transition: theme.transitions.create('width'),
-    width: '100%',
     [theme.breakpoints.up('md')]: {
       width: 200,
     },
@@ -91,6 +88,7 @@ export default function Navbar({ component: Component, ...rest }) {
   
   const classes = useStyles();
 
+  const [searchContent, setSearchContent] = React.useState(null);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [navAnchorEl, setNavAnchorEl] = React.useState(null);
@@ -111,6 +109,14 @@ export default function Navbar({ component: Component, ...rest }) {
 
   const handleLogoutButton = () => { localStorage.clear(); window.location.href='/login' }
   const handleProfileButton = () => { window.location.href='/profile' }
+  const searchOperator = (e) => {
+    e.preventDefault();
+    if (searchContent === null) {
+      return
+    }else{
+      window.location.href='/search?name='+ searchContent
+    }
+  }
 
   // desktop version: left menu
   const renderNavMenu = (
@@ -189,24 +195,23 @@ export default function Navbar({ component: Component, ...rest }) {
             aria-label="open drawer"
             onClick={handleNavMenuOpen}
           >
-            <MenuIcon />
+          <MenuIcon />
           </IconButton>
+
           <Typography className={classes.title} variant="h6" noWrap>
            Fresh Potatoes
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
+          <Paper component="form" className={classes.search}>
+            <IconButton type="button" onClick={searchOperator} className={classes.searchIcon} aria-label="search">
               <SearchIcon />
-            </div>
+            </IconButton>
             <InputBase
               placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
+              className={classes.inputInput}
               inputProps={{ 'aria-label': 'search' }}
+              onChange={(e) => {e.preventDefault(); setSearchContent(e.target.value)}}
             />
-          </div>
+          </Paper>
           <div className={classes.grow} />
 
           {/* check if is login, then display different content on the top right */}

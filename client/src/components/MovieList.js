@@ -69,9 +69,7 @@ class MovieList extends React.Component{
       <div className={this.props.classes.root}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12}>
-            <Typography variant="h6" className={this.props.classes.title}>
-              Movie List
-            </Typography>
+            <Typography variant="h6" className={this.props.classes.title}/>
             <div className={this.props.classes.demo}>
               <List>
                 {this.state.movies.map(movie => (
