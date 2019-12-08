@@ -10,14 +10,16 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import TextField from '@material-ui/core/TextField';
+import ArrowForward from '@material-ui/icons/ArrowForward';
 
 const useStyles = makeStyles(theme => ({
   movieInfo: {
-    height: 800,
+    height: 600,
     position: 'relative',
-    backgroundColor: theme.palette.grey[800],
+    backgroundColor: theme.palette.grey[600],
     color: theme.palette.common.white,
-    marginBottom: theme.spacing(4),
+    marginBottom: theme.spacing(0),
     backgroundImage: 'url(https://source.unsplash.com/random)',
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
@@ -47,6 +49,27 @@ const useStyles = makeStyles(theme => ({
   block: {
     display: 'block',
   },
+  form: {
+    margin: theme.spacing(4, 1, 1, 1),
+    "& .MuiTextField-root": {
+      margin: theme.spacing(1, 1, 1, 1),
+      width: '100%',
+    },
+    alignItems: 'center',
+    position: 'relative',
+    display: 'flex',
+    flexGrow: 1,
+  },
+  addCommentIcon: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: theme.spacing(2, 2, 2, 2),
+  },
+  addCommentTypography: {
+    margin: theme.spacing(2, 2, 2, 2),
+  },
+  addCommentField: {
+  },
 }));
 
 class MovieDetail extends React.Component{
@@ -67,10 +90,13 @@ class MovieDetail extends React.Component{
           rating: 0,
           duration: '',
           contentRating: ''},
-          review:[]}
+          review:[]},
+      title: '',
+      comments: '',
     }
     this.adminButton = this.adminButton.bind(this);
     this.deleteReview = this.deleteReview.bind(this);
+    this.addReview = this.addReview.bind(this);
   }
 
   componentDidMount(){
@@ -85,8 +111,20 @@ class MovieDetail extends React.Component{
     .then(movieInfoReview => this.setState({movieInfoReview: movieInfoReview}));
   }
 
+  addReview(movieId, reviewTitle, reviewContent){
+    fetch('https://web-final-demo.azurewebsites.net/api/review', {
+      method: 'POST',
+      body: JSON.stringify({'title': reviewTitle, 'content': reviewContent, 'movie_id': movieId}),
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': window.sessionStorage.getItem('token')
+      })
+    })
+    .then(res => res.json())
+    .then(res => window.alert(res.message))
+  }
+
   deleteReview(id){
-    console.log(id);
     fetch('https://web-final-demo.azurewebsites.net/api/movie/' + id, {
       method: 'DELETE',
       headers: new Headers({
@@ -98,7 +136,7 @@ class MovieDetail extends React.Component{
   }
 
   adminButton(is_admin, id){
-    if (is_admin){
+    if (is_admin === 'true'){
       return (
         <ListItemSecondaryAction key='button'>
           <IconButton onClick={(e) => {e.preventDefault(); this.deleteReview(id)}} edge="end" aria-label="delete">
@@ -148,13 +186,62 @@ class MovieDetail extends React.Component{
         <Paper>
           <Grid container>
             <Grid item md={12}>
+              {/* add comment section */}
+              <Paper component="form" className={this.props.classes.form} noValidate autoComplete="off">
+                <Typography variant='subtitle2' className={this.props.classes.addCommentTypography}>
+                  Comment:
+                </Typography>
+                <Grid container spacing={5}>
+                  <Grid item md={3}>
+                    <TextField
+                    id="review-title"
+                    label="Title"
+                    placeholder="Title"
+                    variant="outlined"
+                    onChange={(e) => {e.preventDefault(); this.setState({title: e.target.value})}}
+                    className={this.props.classes.addCommentField}
+                    required
+                    >
+                    </TextField>
+                  </Grid>
+                  <Grid item md={9}>
+                    <TextField
+                      id="review-content"
+                      label="Comment"
+                      placeholder="Comment"
+                      multiline
+                      variant="outlined"
+                      onChange={(e) => {e.preventDefault(); this.setState({comments: e.target.value})}}
+                      className={this.props.classes.addCommentField}
+                      required
+                    >
+                    </TextField>
+                  </Grid>
+                </Grid>
+                
+                <IconButton
+                  className={this.props.classes.addCommentIcon}
+                  type='submit'
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (window.sessionStorage.getItem('is_login')){
+                      this.addReview(this.state.movieInfoReview.movie._id, this.state.title, this.state.comments)
+                    }else{
+                      window.alert('Please login in to comment movie.')
+                    }
+                  }}
+                >
+                  <ArrowForward/>
+                </IconButton>
+              </Paper>
               <Typography variant='h4'>
                 Reviews
               </Typography>
+              {/* all user comments */}
               <List className={this.props.classes.root}>
                 {this.state.movieInfoReview.review.map((r) => {
                   return (
-                    <div key={r.movie_id}>
+                    <div key={r._id}>
                       <ListItem alignItems='flex-start'>
                         <ListItemText
                           primary={
