@@ -1,3 +1,8 @@
+
+## NOTE: you have to run `npm install` in /client or /backend folder before npm start
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
