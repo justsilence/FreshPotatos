@@ -35,8 +35,8 @@ class Profile extends React.Component{
   constructor(props) {
     super(props);
       this.state = {
-        name: localStorage.getItem('name'),
-        email: localStorage.getItem('email'),
+        name: window.sessionStorage.getItem('name'),
+        email: window.sessionStorage.getItem('email'),
         reviews: [],
     }
   }
@@ -46,7 +46,7 @@ class Profile extends React.Component{
       method: 'GET',
       headers: new Headers({
         'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('token')
+        'Authorization': window.sessionStorage.getItem('token')
       })
     })
     .then(res => res.json())
@@ -55,7 +55,7 @@ class Profile extends React.Component{
   }
 
   render(){
-    if (localStorage.getItem('is_login') === null){
+    if (window.sessionStorage.getItem('is_login') === null){
       return (<Redirect to='/login'></Redirect>)
     }else{
       return (

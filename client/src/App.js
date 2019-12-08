@@ -8,16 +8,9 @@ import Login from './components/Login';
 import Signup from './components/Signup';
 import Profile from './components/Profile';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
-import { AuthContext } from "./context/auth";
 
 function App(props) {
-  const [authTokens, setAuthTokens] = useState();
-  const setTokens = (data) => {
-    localStorage.setItem("tokens", JSON.stringify(data));
-    setAuthTokens(data);
-  }
   return (
-    <AuthContext.Provider value={{ authTokens, setAuthTokens: setTokens }}>
     <BrowserRouter>
       <div className="App">
         <Navbar/>
@@ -31,8 +24,7 @@ function App(props) {
           <Route path="/profile" component={Profile}/>
         </Switch>
       </div>
-      </BrowserRouter>
-      </AuthContext.Provider>
+    </BrowserRouter>
   );
 }
 

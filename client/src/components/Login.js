@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-// function to check login, then store `is_admin` and `token` in local storage
+// function to check login, then store `is_admin` and `token` in session storage
 function login(email, password) {
   const emailPatternChecker = email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
   if (email === '' || password === '') {
@@ -55,11 +55,11 @@ function login(email, password) {
     .then(res => res.json())
     .then(response => {
       if (response.auth){
-        localStorage.setItem('is_login', response.auth);
-        localStorage.setItem('is_admin', response.isAdmin);
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('name', response.name);
-        localStorage.setItem('email', response.email);
+        window.sessionStorage.setItem('is_login', response.auth);
+        window.sessionStorage.setItem('is_admin', response.isAdmin);
+        window.sessionStorage.setItem('token', response.token);
+        window.sessionStorage.setItem('name', response.name);
+        window.sessionStorage.setItem('email', response.email);
         window.location.href='/';
       }else{
         window.alert('email or password error');
