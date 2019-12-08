@@ -205,7 +205,7 @@ export default function Navbar({ component: Component, ...rest }) {
            Fresh Potatoes
           </Typography>
           <Paper component="form" className={classes.search}>
-            <IconButton type="button" onClick={searchOperator} className={classes.searchIcon} aria-label="search">
+            <IconButton type="submit" onClick={searchOperator} className={classes.searchIcon} aria-label="search">
               <SearchIcon />
             </IconButton>
             <InputBase
