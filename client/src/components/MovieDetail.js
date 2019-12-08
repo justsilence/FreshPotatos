@@ -11,9 +11,6 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-// set 'is_admin' to check if a admin is login
-localStorage.setItem('is_admin', true);
-
 const useStyles = makeStyles(theme => ({
   movieInfo: {
     height: 800,
@@ -94,7 +91,7 @@ class MovieDetail extends React.Component{
       method: 'DELETE',
       headers: new Headers({
         'Content-Type': 'application/json',
-        'Authorization': "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZGU0MTVjOGJlMTVmMjBjOTE1ZThkMjAiLCJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWF0IjoxNTc1NzY0MzA3LCJleHAiOjE1NzU3Njc5MDd9.QUBYYX2HaS1GdBpjGKJUV7kRsgSsWILC3SYl36XiTS4"
+        'Authorization': localStorage.getItem('token')
       })
     })
     .then(res => window.location.reload(true))
