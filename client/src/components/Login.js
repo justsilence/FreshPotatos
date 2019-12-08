@@ -177,13 +177,15 @@ function Login(props) {
 
 
 function postLogin() {
-  const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-  axios.get(proxyUrl+"https://project3b-kam455.glitch.me/api/brand/microsoft", {
+  axios.post('https://web-final-demo.azurewebsites.net/api/user/login', {
     userName,
     password
   }).then(result => {
+    console.log(userName);
+    console.log(password);
+    console.log(result);
     if (result.status === 200) {
-      setAuthTokens(result.data);
+      setAuthTokens(result.token);
       setLoggedIn(true);
     } else {
       setIsError(true);

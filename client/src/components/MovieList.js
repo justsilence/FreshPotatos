@@ -9,8 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import UpdateIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowRight from '@material-ui/icons/ArrowRight';
 import MovieIcon from '@material-ui/icons/Movie';
 
 // self defined styles
@@ -85,10 +84,7 @@ class MovieList extends React.Component{
                     <ListItemText primary={movie.name} />
                     <ListItemSecondaryAction>
                       <IconButton href={'/detail/'+ movie.id} edge="start" aria-label="update">
-                        <UpdateIcon />
-                      </IconButton>
-                      <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
-                        <DeleteIcon />
+                        <ArrowRight />
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>

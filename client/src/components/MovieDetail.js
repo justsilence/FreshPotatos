@@ -11,6 +11,9 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+// set 'is_admin' to check if a admin is login
+localStorage.setItem('is_admin', true);
+
 const useStyles = makeStyles(theme => ({
   movieInfo: {
     height: 800,
@@ -69,7 +72,10 @@ class MovieDetail extends React.Component{
           contentRating: ''},
           review:[]}
     }
+    this.adminButton = this.adminButton.bind(this);
+    this.deleteReview = this.deleteReview.bind(this);
   }
+
   componentDidMount(){
     // mount the date fetch from the specific URL
     fetch(this.state.fetchURL, {
@@ -81,6 +87,31 @@ class MovieDetail extends React.Component{
     .then(res => res.json())
     .then(movieInfoReview => this.setState({movieInfoReview: movieInfoReview}));
   }
+
+  deleteReview(id){
+    console.log(id);
+    fetch('https://web-final-demo.azurewebsites.net/api/movie/' + id, {
+      method: 'DELETE',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI1ZGU0MTVjOGJlMTVmMjBjOTE1ZThkMjAiLCJlbWFpbCI6InRlc3QxQHRlc3QuY29tIiwiaWF0IjoxNTc1NzY0MzA3LCJleHAiOjE1NzU3Njc5MDd9.QUBYYX2HaS1GdBpjGKJUV7kRsgSsWILC3SYl36XiTS4"
+      })
+    })
+    .then(res => window.location.reload(true))
+  }
+
+  adminButton(is_admin, id){
+    if (is_admin){
+      return (
+        <ListItemSecondaryAction key='button'>
+          <IconButton onClick={(e) => {e.preventDefault(); this.deleteReview(id)}} edge="end" aria-label="delete">
+            <DeleteIcon />
+          </IconButton>
+        </ListItemSecondaryAction>
+      )
+    }else{ return }
+  }
+
 
   render() {
     return (
@@ -121,10 +152,13 @@ class MovieDetail extends React.Component{
         <Paper>
           <Grid container>
             <Grid item md={12}>
+              <Typography variant='h4'>
+                Reviews:
+              </Typography>
               <List className={this.props.classes.root}>
                 {this.state.movieInfoReview.review.map((r) => {
                   return (
-                    <div key={r.userName}>
+                    <div key={r.movie_id}>
                       <ListItem alignItems='flex-start'>
                         <ListItemText
                           primary={
@@ -146,11 +180,7 @@ class MovieDetail extends React.Component{
                             </React.Fragment>
                           }
                         />
-                        <ListItemSecondaryAction key='button'>
-                          <IconButton onClick={() => {window.alert("delete")}} edge="end" aria-label="delete">
-                            <DeleteIcon />
-                          </IconButton>
-                        </ListItemSecondaryAction>
+                        {this.adminButton(localStorage.getItem('is_admin'), r._id)}
                       </ListItem>
                       <Divider variant="fullWidth" component="li" />
                     </div>
