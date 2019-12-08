@@ -13,10 +13,15 @@ router.post('/signup', (req, res, next) => {
     passport.authenticate('signup', (err, user, msg) => {
         if (err) {
             console.log(err);
+            res.status(500).json({
+                error: err
+            });
         }
         if (msg) {
             console.log(msg);
-            res.json(msg.message);
+            res.status(500).json({
+                message: msg.message
+            });
         } else {
             req.logIn(user, err => {
                 User.findOne({
@@ -33,8 +38,12 @@ router.post('/signup', (req, res, next) => {
                             user: user
                         });
                     })
-                })
-            })
+                }).catch(err => {
+                    res.status(500).json({
+                        error: err
+                    });
+                });
+            });
         }
     })(req, res, next);
 });
@@ -56,7 +65,8 @@ router.post('/login', (req, res, next) => {
                     const token = jwt.sign(
                         { 
                             userId: user._id,
-                            email: user.email
+                            email: user.email,
+                            isAdmin: user.isAdmin,
                         }, 
                         process.env.SECRET_KEY,
                         { expiresIn: "1h" }
@@ -66,6 +76,7 @@ router.post('/login', (req, res, next) => {
                         user_id: user._id,
                         email: user.email,
                         name: user.name,
+                        isAdmin: user.isAdmin,
                         token: 'JWT ' + token,
                         message: 'success',
                     });
@@ -75,33 +86,30 @@ router.post('/login', (req, res, next) => {
     })(req, res, next);
 });
 
-// router.post('/reset_password', passport.authenticate('jwt'), (req, res, next) => {
-//     const old_password = req.params.old_password;
-//     const new_password = req.params.new_password;
-
-// });
 
 router.get('/profile', passport.authenticate('jwt'), (req, res, next) => {
-    const user_id = req.body._id;
-    Review.find({user_id: user_id}).then(reviews => {
-        res.json({
-            message: "access profile success!",
-            reviews: reviews
+    User.findOne({_id: req.user.user_id}).then(user => {
+        Review.find({user_id: req.user.user_id}).then(reviews => {
+            res.json({
+                message: "access profile success!",
+                profile: user,
+                reviews: reviews
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json({
+                message: "Access profile failed",
+                error: err
+            });
         });
-    });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            message: "Access profile failed",
+            error: err
+        });
+    })
 });
-
-router.get('/auth/github',
-  passport.authenticate('github', { scope: [ 'user:email' ] }));
-
-router.get('/auth/github/callback', 
-  passport.authenticate('github', { failureRedirect: '/' }),
-  (req, res) => {
-    // Successful authentication, redirect home.
-    res.status(200).json({
-        message: "Github OAuth success!"
-    });
-  });
 
 router.get('/auth/google',
   passport.authenticate('google', { scope: ['profile', 'email'] }));
@@ -110,7 +118,8 @@ router.get('/auth/google/callback', passport.authenticate('google'), (req, res, 
     const token = jwt.sign(
         {
             userId: req.user._id,
-            email: req.user.email
+            email: req.user.email,
+            isAdmin: req.user.isAdmin,
         },
         process.env.SECRET_KEY,
         { expiresIn: "1h" }
@@ -119,10 +128,11 @@ router.get('/auth/google/callback', passport.authenticate('google'), (req, res, 
         auth: true,
         user_id: req.user._id,
         email: req.user.email,
+        isAdmin: req.user.isAdmin,
         name: req.user.name,
         token: 'JWT ' + token,
         message: 'google oauth success',
-    })
+    });
 });
 
 

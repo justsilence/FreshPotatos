@@ -32,7 +32,10 @@ const movieSchema = new Schema({
         type: String
     },
     trailer: {
-        type: String
+        type: {
+            url: String,
+            description: String
+        }
     }
 });
 

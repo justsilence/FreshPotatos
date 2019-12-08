@@ -8,7 +8,45 @@ const User = require('../models/user')
 
 require('../config/passport')(passport);
 
+
 // GET /api/movie/search?name=sdasd
+
+router.get('/top', (req, res, next) => {
+    let n = req.query.n;
+    var topn = 3;
+    if (n) {
+        topn = parseInt(n);
+        if (topn > 250) {
+            topn = 10;
+        }
+    }
+    Movie.find({}).sort({'rating': 'desc'}).limit(topn).then(result => {
+        res.status(200).json({
+            movies: result
+        });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+});
+
+
+router.get('/new', (req, res, next) => {
+    Movie.find({}).sort({'datePublished': 'desc'}).limit(10).then(result => {
+        res.status(200).json({
+            movies: result
+        });
+    }).catch(err => {
+        console.log(err);
+        res.status(500).json({
+            error: err
+        });
+    });
+});
+
+
 router.get('/search', (req, res, next) => {
     const genre = req.query.genre;
     console.log(genre);
@@ -51,6 +89,7 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
+// 5dec666d5d65c80639e9e8d9
 router.post('/:id', passport.authenticate('jwt'), (req, res, next) => {
     const review = new Review({
         title: req.body.title,
@@ -67,29 +106,63 @@ router.post('/:id', passport.authenticate('jwt'), (req, res, next) => {
 });
 
 router.put('/:id', passport.authenticate('jwt'), (req, res, next) => {
-    const review = {
+    const new_review = {
         title: req.body.title,
         content: req.body.content,
     };
 
-    Review.findByIdAndUpdate(req.params.id, review, {new: true}).then(result => {
-        res.status(200).json({
-            message: "Update review successful!",
-            result: result,
+    Review.findOne({_id: req.params.id}).then(review => {
+        review.updateOne({user_id: req.user.user_id}, new_review, {new: true}).then(result => {
+            res.status(200).json({
+                message: "Update review successful!",
+                result: result
+            });
+        }).catch(err => {
+            res.status(500).json({
+                error: err,
+                message: "User does not match!"
+            });
         });
     }).catch(err => {
-        console.log(err);
-        res.status(500).json(err);
-    })
-});
-
-
-router.delete('/:id', passport.authenticate('jwt'), (req, res, next) => {
-    Review.deleteOne({_id: req.params.id}).then(result => {
-        res.status(200).json({
-            message: "delete review successful!"
+        res.status(500).json({
+            error: err,
+            message: "No review"
         });
     });
+
+    // Review.findByIdAndUpdate(req.params.id, review, {new: true}).then(result => {
+    //     res.status(200).json({
+    //         message: "Update review successful!",
+    //         result: result,
+    //     });
+    // }).catch(err => {
+    //     console.log(err);
+    //     res.status(500).json(err);
+    // })
+});
+
+router.delete('/:id', passport.authenticate('jwt'), (req, res, next) => {
+    if (req.user.isAdmin) {
+        Review.deleteOne({_id: req.params.id}).then(result => {
+            res.status(200).json({
+                message: "delete review successful!",
+                result: result
+            }).catch(err => {
+                console.log(err);
+                res.status(500).json(err);
+            });
+        });
+    } else {
+        Review.deleteOne({_id: req.params.id, user_id: req.user.user_id}).then(result => {
+            res.status(200).json({
+                message: "delete review successful!",
+                result: result
+            });
+        }).catch(err => {
+            console.log(err);
+            res.status(500).json(err);
+        });
+    }
 });
 
 
