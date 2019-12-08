@@ -151,8 +151,16 @@ export default function Navbar({ component: Component, ...rest }) {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleProfileButton}>Profile</MenuItem>
-      <MenuItem onClick={handleLogoutButton}>Log out</MenuItem>
+      <MenuItem>
+        <Button className={classes.button}  onClick={handleProfileButton}>
+          Profile
+        </Button>
+      </MenuItem>
+      <MenuItem>
+      <Button className={classes.button}  onClick={handleLogoutButton}>
+        Log out
+      </Button>
+      </MenuItem>
     </Menu>
   );
 
@@ -167,19 +175,15 @@ export default function Navbar({ component: Component, ...rest }) {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
-          <Badge badgeContent={11} color="secondary">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
+        <MenuItem>
+        <Button className={classes.button}  onClick={handleProfileButton}>
+          Profile
+        </Button>
       </MenuItem>
-      <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton>
-          <AccountCircle />
-        </IconButton>
-        <p>Profile</p>
+      <MenuItem>
+      <Button className={classes.button}  onClick={handleLogoutButton}>
+        Log out
+      </Button>
       </MenuItem>
     </Menu>
   );
@@ -217,26 +221,32 @@ export default function Navbar({ component: Component, ...rest }) {
           {/* check if is login, then display different content on the top right */}
 
           {/* desktop version */}
+          <div className={classes.sectionDesktop} >
           {localStorage.getItem('is_login') ? 
-          (<div className={classes.sectionDesktop} >
-            <IconButton edge="end" onClick={handleProfileMenuOpen}>
+          (
+            <Button className={classes.button}  edge="end" onClick={handleProfileMenuOpen}>
               <AccountCircle />
               {localStorage.getItem('name')}
-            </IconButton>
-          </div>):
+            </Button>
+          ):
           (
           <Button className={classes.button} onClick={event =>  window.location.href='/login'}>
             LogIn
           </Button>
           )}
+          </div>
 
           {/* mobile version */}
           <div className={classes.sectionMobile}>
-            <IconButton onClick={handleMobileMenuOpen} >
+          {localStorage.getItem('is_login') ? 
+          (
+            <Button className={classes.button} onClick={handleMobileMenuOpen} >
               <MoreIcon />
-            </IconButton>
-          </div>
-
+            </Button>
+          ):(<Button className={classes.button} onClick={event =>  window.location.href='/login'}>
+  LogIn
+</Button>)}
+  </div>
         </Toolbar>
       </AppBar>
       {renderMobileMenu}
