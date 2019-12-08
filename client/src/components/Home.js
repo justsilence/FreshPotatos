@@ -36,14 +36,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const slideIframes = [
-  'https://www.youtube.com/embed/jCFWEzIVILc',
-  'https://www.youtube.com/embed/kR_gi_kEbPE',
-"https://www.imdb.com/videoembed/vi1298770969",
-  'https://www.youtube.com/embed/RxAtuMu_ph4',
-  'https://www.youtube.com/embed/r7rcE7bhCFE'
+// const slideIframes = [
+//   'https://www.youtube.com/embed/jCFWEzIVILc',
+//   'https://www.youtube.com/embed/kR_gi_kEbPE',
+// "https://www.imdb.com/videoembed/vi1298770969",
+//   'https://www.youtube.com/embed/RxAtuMu_ph4',
+//   'https://www.youtube.com/embed/r7rcE7bhCFE'
   
-];
+// ];
  
 const properties = {
   duration: 1000000,
@@ -102,7 +102,7 @@ class Home extends Component{
                 {/* {console.log(this.state)} */}
         <Slide {...properties}>
         {this.state.movies.map(movie => (
-          <div >
+          <div key={movie.id}>
           <iframe title='1' src={movie.trailerURL} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
           <br/> 
           <Button className={this.props.classes.button} onClick = {(e)=>{e.preventDefault(); window.location.href=('/detail/'+movie.id)}}>Detail</Button>
@@ -112,7 +112,7 @@ class Home extends Component{
       </div>
       <div className={this.props.classes.root}>
       <GridList cellHeight={50} className={this.props.classes.gridList}>
-        <GridListTile key="Header" cols={2} style={{ height: 70 }}>
+        <GridListTile /*key="Header"*/ cols={2} style={{ height: 70 }}>
           <h2 component="div">Search By Genre</h2>
         </GridListTile>
         {this.state.genres.map(genre => (

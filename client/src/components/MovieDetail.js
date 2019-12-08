@@ -112,7 +112,7 @@ class MovieDetail extends React.Component{
   }
 
   addReview(movieId, reviewTitle, reviewContent){
-    if (reviewTitle == '' || reviewContent == ''){
+    if (reviewTitle === '' || reviewContent === ''){
       window.alert('Please input title or comment')
     }else{
       fetch('https://web-final-demo.azurewebsites.net/api/review', {

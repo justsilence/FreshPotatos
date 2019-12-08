@@ -13,6 +13,8 @@ import Password from '@material-ui/icons/VpnKey';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
+// import LoginGoogle from './GoogleOAuth';
+
 // generate style attributes
 const useStyles = makeStyles(theme => ({
   // style for current page
@@ -40,6 +42,8 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(2, 0, 2),
   },
 }));
+
+
 
 // function to check login, then store `is_admin` and `token` in session storage
 function login(email, password) {
@@ -81,6 +85,8 @@ class Login extends React.Component{
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
   }
+
+
   handleChangeEmail(event) { this.setState({email: event.target.value}); }
   handleChangePassword(event) { this.setState({password: event.target.value}); }
 
