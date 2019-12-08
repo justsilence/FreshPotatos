@@ -64,11 +64,11 @@ const signup = function(e, email, password, name) {
           headers: new Headers({ 'Content-Type': 'application/json' })
         })
         .then(r => r.json())
-        .then(r => {localStorage.setItem('is_login', r.auth);
-                      localStorage.setItem('is_admin', r.isAdmin);
-                      localStorage.setItem('token', r.token);
-                      localStorage.setItem('name', r.name);
-                      localStorage.setItem('email', r.email);
+        .then(r => {window.sessionStorage.setItem('is_login', r.auth);
+          window.sessionStorage.setItem('is_admin', r.isAdmin);
+          window.sessionStorage.setItem('token', r.token);
+          window.sessionStorage.setItem('name', r.name);
+          window.sessionStorage.setItem('email', r.email);
                       window.location.href='/';
                       })
       }else{

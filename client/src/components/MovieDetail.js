@@ -91,7 +91,7 @@ class MovieDetail extends React.Component{
       method: 'DELETE',
       headers: new Headers({
         'Content-Type': 'application/json',
-        'Authorization': localStorage.getItem('token')
+        'Authorization': window.sessionStorage.getItem('token')
       })
     })
     .then(res => window.location.reload(true))
@@ -176,7 +176,7 @@ class MovieDetail extends React.Component{
                             </React.Fragment>
                           }
                         />
-                        {this.adminButton(localStorage.getItem('is_admin'), r._id)}
+                        {this.adminButton(window.sessionStorage.getItem('is_admin'), r._id)}
                       </ListItem>
                       <Divider variant="fullWidth" component="li" />
                     </div>

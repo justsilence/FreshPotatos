@@ -106,7 +106,7 @@ export default function Navbar({ component: Component, ...rest }) {
   const handleNavMenuOpen = event => { setNavAnchorEl(event.currentTarget); };
   const handleNavMenuClose = () => { setNavAnchorEl(null); };
 
-  const handleLogoutButton = () => { localStorage.clear(); window.location.href='/login' }
+  const handleLogoutButton = () => { window.sessionStorage.clear(); window.location.href='/login' }
   const handleProfileButton = () => { window.location.href='/profile' }
   const searchOperator = (e) => {
     e.preventDefault();
@@ -221,11 +221,11 @@ export default function Navbar({ component: Component, ...rest }) {
 
           {/* desktop version */}
           <div className={classes.sectionDesktop} >
-          {localStorage.getItem('is_login') ? 
+          {window.sessionStorage.getItem('is_login') ? 
           (
             <Button className={classes.button}  edge="end" onClick={handleProfileMenuOpen}>
               <AccountCircle />
-              {localStorage.getItem('name')}
+              {window.sessionStorage.getItem('name')}
             </Button>
           ):
           (
@@ -237,7 +237,7 @@ export default function Navbar({ component: Component, ...rest }) {
 
           {/* mobile version */}
           <div className={classes.sectionMobile}>
-          {localStorage.getItem('is_login') ? 
+          {window.sessionStorage.getItem('is_login') ? 
           (
             <Button className={classes.button} onClick={handleMobileMenuOpen} >
               <MoreIcon />
