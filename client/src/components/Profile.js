@@ -6,7 +6,9 @@ import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import { List, ListItem, ListItemText } from '@material-ui/core';
+import { List, ListItem, ListItemText, ListItemSecondaryAction } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { Redirect } from 'react-router-dom'
 
 const useStyles = makeStyles(theme => ({
@@ -39,6 +41,18 @@ class Profile extends React.Component{
         email: window.sessionStorage.getItem('email'),
         reviews: [],
     }
+    this.deleteReview = this.deleteReview.bind(this);
+  }
+
+  deleteReview(id){
+    fetch('https://web-final-demo.azurewebsites.net/api/movie/' + id, {
+      method: 'DELETE',
+      headers: new Headers({
+        'Content-Type': 'application/json',
+        'Authorization': window.sessionStorage.getItem('token')
+      })
+    })
+    .then(res => window.location.reload(true))
   }
 
   componentDidMount(){
@@ -97,7 +111,7 @@ class Profile extends React.Component{
               <List className={this.props.classes.root}>
                 {this.state.reviews.map(review => {
                   return (
-                    <div key={review.movie_id}>
+                    <div key={review._id}>
                       <ListItem alignItems="flex-start">
                       <ListItemText
                         primary={review.title}
@@ -115,14 +129,13 @@ class Profile extends React.Component{
                           </React.Fragment>
                         }
                       />
-                      {/* uncomment it to allow user to delete movie review */}
-                      {/* <ListItemSecondaryAction key='button'>
-                        <IconButton onClick={(e) => {e.preventDefault(); this.deleteReview(id)}} edge="end" aria-label="delete">
+                      <ListItemSecondaryAction key='button'>
+                        <IconButton onClick={(e) => {e.preventDefault(); this.deleteReview(review._id)}} edge="end" aria-label="delete">
                           <DeleteIcon />
                         </IconButton>
-                      </ListItemSecondaryAction> */}
+                      </ListItemSecondaryAction>
                     </ListItem>
-                    <Divider variant="inset" component="li" />
+                    <Divider variant="fullWidth" component="li" />
                     </div>
                   )
                 })}
