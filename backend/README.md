@@ -30,6 +30,12 @@ Create a `.env` file in `backend` folder, put your
 
 ## API Usage
 
+Use `GET /api/movie/top?n=10` to retrieve top 10 movies
+
+If use `GET /api/movie/top` will return default top 3 movies
+
+If `n > total_number_of(movies)`, the result will be top 10, order by rating.
+
 Use `POST /api/user/signup` to create a new user
 example:
 
