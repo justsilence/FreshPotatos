@@ -109,7 +109,6 @@ class MovieDetail extends React.Component{
     }else{ return }
   }
 
-
   render() {
     return (
       <div>

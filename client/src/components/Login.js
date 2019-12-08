@@ -58,6 +58,8 @@ function login(email, password) {
         localStorage.setItem('is_login', response.auth);
         localStorage.setItem('is_admin', response.isAdmin);
         localStorage.setItem('token', response.token);
+        localStorage.setItem('name', response.name);
+        localStorage.setItem('email', response.email);
         window.location.href='/';
       }else{
         window.alert('email or password error');

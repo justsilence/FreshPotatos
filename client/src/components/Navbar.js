@@ -11,7 +11,6 @@ import Menu from '@material-ui/core/Menu';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
-import MailIcon from '@material-ui/icons/Mail';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
@@ -76,30 +75,22 @@ const useStyles = makeStyles(theme => ({
       display: 'none',
     },
   },
-
-  // root: {
-  //   '&:focus': {
-  //     backgroundColor: theme.palette.primary.main,
-  //     '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-  //       color: theme.palette.common.white,
-  //     },
-  //   },
-  // },
+  button: {
+    marginRight: theme.spacing(0),
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    borderRadius: theme.spacing(1),
+    border: theme.spacing(0),
+    color: 'white',
+    height: theme.spacing(5),
+    padding: theme.spacing(1, 5, 1, 5),
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+  },
 }));
-
-const buttonStyle = {
-  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-  borderRadius: 3,
-  border: 0,
-  color: 'white',
-  height: 48,
-  padding: '0 30px',
-  boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-};
 
 export default function Navbar({ component: Component, ...rest }) {
   
   const classes = useStyles();
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
   const [navAnchorEl, setNavAnchorEl] = React.useState(null);
@@ -109,14 +100,19 @@ export default function Navbar({ component: Component, ...rest }) {
   const isNavMenuOpen = Boolean(navAnchorEl);
 
   const handleProfileMenuOpen = event => { setAnchorEl(event.currentTarget); };
-  const handleMobileMenuClose = () => { setMobileMoreAnchorEl(null); };
+
   const handleMobileMenuOpen = event => { setMobileMoreAnchorEl(event.currentTarget); };
+  const handleMobileMenuClose = () => { setMobileMoreAnchorEl(null); };
+  
   const handleMenuClose = () => { setAnchorEl(null); handleMobileMenuClose(); };
+
   const handleNavMenuOpen = event => { setNavAnchorEl(event.currentTarget); };
   const handleNavMenuClose = () => { setNavAnchorEl(null); };
-  const handleLogout = () => { localStorage.clear(); window.location.href='/login' }
 
-  // top-left menu
+  const handleLogoutButton = () => { localStorage.clear(); window.location.href='/login' }
+  const handleProfileButton = () => { window.location.href='/profile' }
+
+  // desktop version: left menu
   const renderNavMenu = (
     <Menu
       id="primary-search-account-menu-nav"
@@ -126,48 +122,40 @@ export default function Navbar({ component: Component, ...rest }) {
       onClose={handleNavMenuClose}
     >
       <MenuItem>
-        <Button style = {buttonStyle}  onClick={event =>  window.location.href='/'}>
+        <Button className={classes.button}  onClick={(e) => {e.preventDefault(); window.location.href='/'}}>
           Home
         </Button>
       </MenuItem>
       <MenuItem>
-        <Button style = {buttonStyle}  onClick={event =>  window.location.href='/list'}>
+        <Button className={classes.button}  onClick={(e) => {e.preventDefault(); window.location.href='/list'}}>
           All movies
         </Button>
       </MenuItem>
     </Menu>
-    
   );
 
-  const menuId = 'primary-search-account-menu';
+  // desktop version: right menu after login
   const renderMenu = (
-
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        id={menuId}
-        keepMounted
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMenuOpen}
-        onClose={handleMenuClose}
-      >
-        <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-        <MenuItem onClick={handleMenuClose}>My account</MenuItem>
-        <MenuItem onClick={handleLogout}>Log out</MenuItem>
-      </Menu>
-    
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+      id='primary-search-account-menu'
+      keepMounted
+      transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={handleProfileButton}>Profile</MenuItem>
+      <MenuItem onClick={handleLogoutButton}>Log out</MenuItem>
+    </Menu>
   );
-  
-  
 
-  
-
-  const mobileMenuId = 'primary-search-account-menu-mobile';
+  // mobile version for above components
   const renderMobileMenu = (
   <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-      id={mobileMenuId}
+      id='primary-search-account-menu-mobile'
       keepMounted
       transformOrigin={{ vertical: 'top', horizontal: 'right' }}
       open={isMobileMenuOpen}
@@ -182,12 +170,7 @@ export default function Navbar({ component: Component, ...rest }) {
         <p>Notifications</p>
       </MenuItem>
       <MenuItem onClick={handleProfileMenuOpen}>
-        <IconButton
-          aria-label="account of current user"
-          aria-controls="primary-search-account-menu"
-          aria-haspopup="true"
-          color="inherit"
-        >
+        <IconButton>
           <AccountCircle />
         </IconButton>
         <p>Profile</p>
@@ -237,7 +220,7 @@ export default function Navbar({ component: Component, ...rest }) {
             </IconButton>
           </div>):
           (
-          <Button style = {buttonStyle} onClick={event =>  window.location.href='/login'}>
+          <Button className={classes.button} onClick={event =>  window.location.href='/login'}>
             LogIn
           </Button>
           )}

@@ -7,6 +7,7 @@ import MovieDetail from './components/MovieDetail';
 import MovieModify from './components/MovieModify';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import Profile from './components/Profile';
 import {BrowserRouter, Route, Switch} from 'react-router-dom';
 import { AuthContext } from "./context/auth";
 
@@ -29,6 +30,7 @@ function App(props) {
           <Route path="/modify" component={MovieModify}/>
           <Route path="/login" component={Login}/>
           <Route path="/signup" component={Signup}/>
+          <Route path="/profile" component={Profile}/>
         </Switch>
       </div>
       </BrowserRouter>
