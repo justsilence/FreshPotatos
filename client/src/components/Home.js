@@ -39,19 +39,20 @@ const useStyles = makeStyles(theme => ({
 const slideIframes = [
   'https://www.youtube.com/embed/jCFWEzIVILc',
   'https://www.youtube.com/embed/kR_gi_kEbPE',
+"https://www.imdb.com/videoembed/vi1298770969",
   'https://www.youtube.com/embed/RxAtuMu_ph4',
   'https://www.youtube.com/embed/r7rcE7bhCFE'
   
 ];
  
 const properties = {
-  duration: 5000,
+  duration: 1000000,
   transitionDuration: 500,
   infinite: true,
   indicators: true,
   arrows: true,
   onChange: (oldIndex, newIndex) => {
-    console.log(`slide transition from ${oldIndex} to ${newIndex}`);
+    // console.log(`slide transition from ${oldIndex} to ${newIndex}`);
   }
 }
 
@@ -59,15 +60,16 @@ class Home extends Component{
     constructor(props) {
       super(props);
       this.state = {
-        genres: []
+        genres: [],
+        // movies: [{id: '', trailerURL: ''}, {id: '', trailerURL: ''}, {id: '', trailerURL: ''}]
+        movies: []
       }
     }
     
 
     componentDidMount(){
-
-      const fetchURL = 'https://web-final-demo.azurewebsites.net/api/index';
-      fetch(fetchURL, {
+      const fetchGenreURL = 'https://web-final-demo.azurewebsites.net/api/index';
+      fetch(fetchGenreURL, {
         method: 'GET',
         headers: new Headers({
           'Content-Type': 'application/json'
@@ -76,26 +78,36 @@ class Home extends Component{
       .then(res => res.json())
       .then(res => res['genres'])
       .then(genres => this.setState({genres: genres}));
-    }
+    
+      const fetchTrailerURL = 'https://web-final-demo.azurewebsites.net/api/movie/top';
+      fetch(fetchTrailerURL,{
+        method : 'GET',
+        headers: new Headers({
+          'Content-type':'application/json'
+        })
+      })
+      .then(res => res.json())
+      .then(res => res['movies'])
+      .then(movies => movies.map(m => {return {'id': m._id, 'trailerURL': m.trailer.url}}))
+      .then(res => {this.setState({movies: res}, () =>  {
+        console.log(this.state.movies);
+      })})
+      }
 
     render() {      
         return (
           <div>
+            <br/>
               <div className="slide-container">
+                {/* {console.log(this.state)} */}
         <Slide {...properties}>
-        <div className="each-slide">
-           <iframe title='1' width="560" height="315" src={slideIframes[0]} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+        {this.state.movies.map(movie => (
+          <div >
+          <iframe title='1' src={movie.trailerURL} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+          <br/> 
+          <Button className={this.props.classes.button} onClick = {(e)=>{e.preventDefault(); window.location.href=('/detail/'+movie.id)}}>Detail</Button>
           </div>
-          <div className="each-slide"> 
-            <iframe title='2' width="600" height="315" src={slideIframes[1]} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-          </div>
-          <div className="each-slide">            
-            <iframe title='3' width="560" height="315" src={slideIframes[2]} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-          </div>
-          <div className="each-slide">
-            <iframe title='4' width="560" height="315" src={slideIframes[3]} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-          </div>
-         
+        ))}
         </Slide>
       </div>
       <div className={this.props.classes.root}>
