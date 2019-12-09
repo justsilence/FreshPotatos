@@ -20,7 +20,7 @@ const useStyles = makeStyles(theme => ({
   title: {
     margin: theme.spacing(4, 0, 2),
   },
-  gridroot: {
+  gridRoot: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
@@ -41,29 +41,6 @@ class MovieList extends React.Component{
     super(props);
     this.state = {
       movies: []
-    }
-    this.showMovies = this.showMovies.bind(this);
-  }
-
-  showMovies(movies){
-    if (movies.length === 0) {
-      return (<Typography variant="h6">Sorry, no movie found.</Typography>)
-    }else{
-      return (
-        movies.map(m => (
-                  <GridListTile key={m.img} >
-                     <img src={m.image} alt={m.name} />
-                     <GridListTileBar
-                      title={m.name}
-              subtitle={<span>rating: {m.rating}</span>}
-              actionIcon={
-                <IconButton aria-label={`info about ${m.name}`}  onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}} className={this.props.classes.icon}>
-                  <InfoIcon />
-                </IconButton>
-              }/>
-                </GridListTile>
-            ))
-            )
     }
   }
 
@@ -100,14 +77,14 @@ class MovieList extends React.Component{
   render(){
     return (
       <div>
-      <div className={this.props.classes.gridroot}>
+      <div className={this.props.classes.gridRoot}>
               <GridList cellHeight={370} className={this.props.classes.gridList}>
                 <GridListTile key="Header" cols={2} style={{ height: 0 }}>
                   <h2 component="div">What we found</h2>
                 </GridListTile>
                 {this.state.movies.map(m => (
-                  <GridListTile key={m.img} >
-                     <img src={m.image} alt={m.name} />
+                  <GridListTile key={m.id} >
+                     <img src={m.image} alt={m.name} onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}}/>
                      <GridListTileBar
                       title={m.name}
               subtitle={<span>rating: {m.rating}</span>}

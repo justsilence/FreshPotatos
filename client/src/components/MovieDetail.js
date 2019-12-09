@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
@@ -147,9 +146,9 @@ class MovieDetail extends React.Component{
     if (reviewTitle === '' || reviewContent === ''){
       window.alert('Please input title or comment')
     }else{
-      fetch('https://web-final-demo.azurewebsites.net/api/review', {
+      fetch('https://web-final-demo.azurewebsites.net/api/movie/'+movieId, {
         method: 'POST',
-        body: JSON.stringify({'title': reviewTitle, 'content': reviewContent, 'movie_id': movieId}),
+        body: JSON.stringify({'title': reviewTitle, 'content': reviewContent}),
         headers: new Headers({
           'Content-Type': 'application/json',
           'Authorization': window.sessionStorage.getItem('token')
