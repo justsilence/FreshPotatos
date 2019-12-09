@@ -121,7 +121,7 @@ class Home extends Component{
               </Slide>
             </div>
             <div className={this.props.classes.root}>
-              <GridList cellHeight={180} className={this.props.classes.gridList}>
+              <GridList cellHeight={230} className={this.props.classes.gridList}>
                 <GridListTile key="Header" cols={2} style={{ height: 70 }}>
                   <h2 component="div">Top10</h2>
                 </GridListTile>
