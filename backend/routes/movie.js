@@ -89,12 +89,12 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-// 5dec666d5d65c80639e9e8d9
 router.post('/:id', passport.authenticate('jwt'), (req, res, next) => {
+    console.log('user id = ' + req.user._id);
     const review = new Review({
         title: req.body.title,
         content: req.body.content,
-        user_id: req.body.user_id,
+        user_id: req.user._id,
         movie_id: req.params.id
     });
     review.save().then(createdReview => {

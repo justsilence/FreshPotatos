@@ -177,6 +177,7 @@ module.exports = (passport) => {
         }).then(user => {
             if (user) {
                 console.log("User authenticated with passport-jwt");
+                console.log(user);
                 return done(null, user);
             } else {
                 console.log("Authenticate failed");

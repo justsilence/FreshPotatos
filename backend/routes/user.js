@@ -71,6 +71,7 @@ router.post('/login', (req, res, next) => {
                         process.env.SECRET_KEY,
                         { expiresIn: "1h" }
                     );
+                    console.log(req.user);
                     res.status(200).send({
                         auth: true,
                         user_id: user._id,
@@ -88,20 +89,26 @@ router.post('/login', (req, res, next) => {
 
 
 router.get('/profile', passport.authenticate('jwt'), (req, res, next) => {
-    User.findOne({_id: req.user.user_id}).then(user => {
-        Review.find({user_id: req.user.user_id}).then(reviews => {
-            res.json({
-                message: "access profile success!",
-                profile: user,
-                reviews: reviews
+    User.findOne({_id: req.user._id}).then(user => {
+        if (user) {
+            Review.find({user_id: req.user._id}).then(reviews => {
+                res.json({
+                    message: "access profile success!",
+                    profile: user,
+                    reviews: reviews
+                });
+            }).catch(err => {
+                console.log(err);
+                res.status(500).json({
+                    message: "Access profile failed",
+                    error: err
+                });
             });
-        }).catch(err => {
-            console.log(err);
+        } else {
             res.status(500).json({
-                message: "Access profile failed",
-                error: err
+                error: "user does not exist"
             });
-        });
+        }
     }).catch(err => {
         console.log(err);
         res.status(500).json({
