@@ -40,8 +40,33 @@ class MovieList extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-      movies: []
+      movies: ['1']
     }
+    this.showMovies = this.showMovies.bind(this);
+  }
+
+  showMovies(movies){
+    if (movies[0] === '1'){
+      return (<Typography variant="h6">Loading...</Typography>)
+    } else if (movies.length === 0) {
+      return (<Typography variant="h6">Sorry, no movie found.</Typography>)
+    } else {
+      return (
+        movies.map(m => (
+          <GridListTile key={m.id} >
+            <img src={m.image} alt={m.name} onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}}/>
+            <GridListTileBar
+              title={m.name}
+              subtitle={<span>rating: {m.rating}</span>}
+              actionIcon={
+                <IconButton aria-label={`info about ${m.name}`}  onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}} className={this.props.classes.icon}>
+                  <InfoIcon />
+                </IconButton>}
+              />
+        </GridListTile>
+        )))
+    }
+    
   }
 
   componentDidMount(){
@@ -82,20 +107,7 @@ class MovieList extends React.Component{
                 <GridListTile key="Header" cols={2} style={{ height: 0 }}>
                   <h2 component="div">What we found</h2>
                 </GridListTile>
-                {this.state.movies.map(m => (
-                  <GridListTile key={m.id} >
-                     <img src={m.image} alt={m.name} onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}}/>
-                     <GridListTileBar
-                      title={m.name}
-              subtitle={<span>rating: {m.rating}</span>}
-              actionIcon={
-                <IconButton aria-label={`info about ${m.name}`}  onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}} className={this.props.classes.icon}>
-                  <InfoIcon />
-                </IconButton>
-              }/>
-                </GridListTile>
-                ))}
-                {this.state.movies.length === 0?(<Typography variant="h6">Sorry, no movie found.</Typography>):(<div></div>)}
+                {this.showMovies(this.state.movies)}
               </GridList>
             </div>
       </div>
