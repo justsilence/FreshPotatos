@@ -57,7 +57,8 @@ class MovieList extends React.Component{
     if (movies.length === 0) {
       return (<Typography variant="h6">Sorry, no movie found.</Typography>)
     }else{
-      return (movies.map(m => (
+      return (
+        movies.map(m => (
                   <GridListTile key={m.img} >
                      <img src={m.image} alt={m.name} />
                      <GridListTileBar
@@ -69,7 +70,8 @@ class MovieList extends React.Component{
                 </IconButton>
               }/>
                 </GridListTile>
-            )))
+            ))
+            )
         // movies.map(movie => (
         //   <ListItem key={movie.id}>
         //     <ListItemAvatar>
@@ -138,7 +140,7 @@ class MovieList extends React.Component{
               }/>
                 </GridListTile>
                 ))}
-                {this.showMovies(this.state.movies)}
+                {this.state.movies.length === 0?(<Typography variant="h6">Sorry, no movie found.</Typography>):(<div></div>)}
               </GridList>
             </div>
             
