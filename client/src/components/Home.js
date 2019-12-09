@@ -63,7 +63,7 @@ class Home extends Component{
         top: []
       }
     }
-  }
+  
 
   componentDidMount(){
     // fetch all movie genres
@@ -85,6 +85,7 @@ class Home extends Component{
       headers: new Headers({
         'Content-type':'application/json'
       })
+    })
       .then(res => res.json())
       .then(res => res['movies'])
       .then(movies => movies.map(m => {return {'id': m._id,  'name': m.name, 'trailerURL': m.trailer.url}}))
@@ -153,7 +154,6 @@ class Home extends Component{
               </GridList>
             </div>
           </div>
-        </div>
       );
   }
 }
