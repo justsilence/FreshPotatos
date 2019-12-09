@@ -13,7 +13,6 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
   link: {
