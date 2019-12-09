@@ -50,13 +50,46 @@ class MovieList extends React.Component{
     this.state = {
       movies: []
     }
+    this.showMovies = this.showMovies.bind(this);
+  }
+
+  showMovies(movies){
+    if (movies.length === 0) {
+      return (<Typography variant="h6">Sorry, no movie found.</Typography>)
+    }else{
+      return (movies.map(m => (
+                  <GridListTile key={m.img} >
+                     <img src={m.image} alt={m.name} />
+                     <GridListTileBar
+                      title={m.name}
+              subtitle={<span>rating: {m.rating}</span>}
+              actionIcon={
+                <IconButton aria-label={`info about ${m.name}`}  onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}} className={this.props.classes.icon}>
+                  <InfoIcon />
+                </IconButton>
+              }/>
+                </GridListTile>
+            )))
+        // movies.map(movie => (
+        //   <ListItem key={movie.id}>
+        //     <ListItemAvatar>
+        //       <Avatar alt={movie.name} src={movie.image} />
+        //     </ListItemAvatar>
+        //     <ListItemText primary={movie.name} />
+        //     <ListItemSecondaryAction>
+        //       <IconButton href={'/detail/'+ movie.id} edge="start" aria-label="update">
+        //         <ArrowRight />
+        //       </IconButton>
+        //     </ListItemSecondaryAction>
+        //   </ListItem>
+        //   )))
+      
+    }
   }
 
   componentDidMount(){
     // mount the date fetch from the specific URL
     var fetchURL = '';
-    console.log('this.props');
-    console.log(this.props.routerProps.fetchURL);
     if (this.props.routerProps.fetchURL){
       fetchURL = this.props.routerProps.fetchURL;
       fetch(fetchURL, {
@@ -88,9 +121,9 @@ class MovieList extends React.Component{
     return (
       <div>
       <div className={this.props.classes.gridroot}>
-              <GridList cellHeight={300} className={this.props.classes.gridList}>
+              <GridList cellHeight={350} className={this.props.classes.gridList}>
                 <GridListTile key="Header" cols={2} style={{ height: 70 }}>
-                  <h2 component="div">What we found</h2>
+                  {/* <h2 component="div">What we found</h2> */}
                 </GridListTile>
                 {this.state.movies.map(m => (
                   <GridListTile key={m.img} >
@@ -105,8 +138,10 @@ class MovieList extends React.Component{
               }/>
                 </GridListTile>
                 ))}
+                {this.showMovies(this.state.movies)}
               </GridList>
             </div>
+            
       {/* <div className={this.props.classes.root}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={12}>
@@ -126,6 +161,7 @@ class MovieList extends React.Component{
                     </ListItemSecondaryAction>
                   </ListItem>
                 }
+                {this.showMovies(this.state.movies)}
               </List>
             </div>
           </Grid>

@@ -220,88 +220,8 @@ export default function Navbar({ component: Component, ...rest }) {
             />
           </Paper>
 
-          {/* <Link
-            className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=Drama')
-            }}
-          >
-            Drama
-          </Link>
-          
-          <Link
-          className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=Action')
-            }}
-          >
-            Action
-          </Link>
-
-          <Link
-          className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=Adventure')
-            }}
-          >
-            Adventure
-          </Link>
-
-          <Link
-          className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=Crime')
-            }}
-          >
-            Crime
-          </Link>
-
-          <Link
-          className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=Romance')
-            }}
-          >
-            Romance
-          </Link>
-
-          <Link
-          className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=War')
-            }}
-          >
-            War
-          </Link> */}
-
           <div className={classes.grow} />
-
           {/* check if is login, then display different content on the top right */}
-
           {/* desktop version */}
           <div className={classes.sectionDesktop} >
           {window.sessionStorage.getItem('is_login') ? 
