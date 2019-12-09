@@ -121,9 +121,9 @@ class MovieList extends React.Component{
     return (
       <div>
       <div className={this.props.classes.gridroot}>
-              <GridList cellHeight={350} className={this.props.classes.gridList}>
-                <GridListTile key="Header" cols={2} style={{ height: 70 }}>
-                  {/* <h2 component="div">What we found</h2> */}
+              <GridList cellHeight={370} className={this.props.classes.gridList}>
+                <GridListTile key="Header" cols={2} style={{ height: 0 }}>
+                  <h2 component="div">What we found</h2>
                 </GridListTile>
                 {this.state.movies.map(m => (
                   <GridListTile key={m.img} >
