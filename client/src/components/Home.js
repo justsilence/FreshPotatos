@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import '../css/Home.css';
 import { Slide } from 'react-slideshow-image';
 
@@ -43,16 +44,13 @@ const useStyles = makeStyles(theme => ({
     boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
   },
 }));
- 
+
 const properties = {
   duration: 1000000,
   transitionDuration: 500,
   infinite: true,
   indicators: true,
   arrows: true,
-  onChange: (oldIndex, newIndex) => {
-    // console.log(`slide transition from ${oldIndex} to ${newIndex}`);
-  }
 }
 
 class Home extends Component{
@@ -65,26 +63,27 @@ class Home extends Component{
         top: []
       }
     }
-    
+  }
 
-    componentDidMount(){
-      const fetchGenreURL = 'https://web-final-demo.azurewebsites.net/api/index';
-      fetch(fetchGenreURL, {
-        method: 'GET',
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
+  componentDidMount(){
+    // fetch all movie genres
+    const fetchGenreURL = 'https://web-final-demo.azurewebsites.net/api/index';
+    fetch(fetchGenreURL, {
+      method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json'
       })
-      .then(res => res.json())
-      .then(res => res['genres'])
-      .then(genres => this.setState({genres: genres}));
+    })
+    .then(res => res.json())
+    .then(res => res['genres'])
+    .then(genres => this.setState({genres: genres}));
     
-      const fetchTrailerURL = 'https://web-final-demo.azurewebsites.net/api/movie/top';
-      fetch(fetchTrailerURL,{
-        method : 'GET',
-        headers: new Headers({
-          'Content-type':'application/json'
-        })
+    // fetch top 3 movies information
+    const fetchTrailerURL = 'https://web-final-demo.azurewebsites.net/api/movie/top';
+    fetch(fetchTrailerURL,{
+      method : 'GET',
+      headers: new Headers({
+        'Content-type':'application/json'
       })
       .then(res => res.json())
       .then(res => res['movies'])
@@ -153,10 +152,10 @@ class Home extends Component{
                 ))}
               </GridList>
             </div>
-         
           </div>
-        );
-      }
+        </div>
+      );
+  }
 }
 
 export default function Hook(props) {
