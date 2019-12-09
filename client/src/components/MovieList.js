@@ -61,7 +61,7 @@ class MovieList extends React.Component{
       })
       .then(res => res.json())
       .then(res => res['result'])
-      .then(movies => movies.map((movie) => {return {'name': movie.name, 'id': movie._id}}))
+      .then(movies => movies.map((movie) => {return {'name': movie.name, 'id': movie._id, 'image': movie.image}}))
       .then(movies => this.setState({movies: movies}));
     }
   }

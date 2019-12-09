@@ -13,8 +13,12 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import Link from '@material-ui/core/Link';
 
 const useStyles = makeStyles(theme => ({
+  link: {
+    marginLeft: theme.spacing(2),
+  },
   grow: {
     flexGrow: 1,
   },
@@ -215,6 +219,85 @@ export default function Navbar({ component: Component, ...rest }) {
               onChange={(e) => {e.preventDefault(); setSearchContent(e.target.value)}}
             />
           </Paper>
+
+          <Link
+            className={classes.link}
+            component="button"
+            variant="body2"
+            color="inherit"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href=('/search?genre=Drama')
+            }}
+          >
+            Drama
+          </Link>
+          
+          <Link
+          className={classes.link}
+            component="button"
+            variant="body2"
+            color="inherit"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href=('/search?genre=Action')
+            }}
+          >
+            Action
+          </Link>
+
+          <Link
+          className={classes.link}
+            component="button"
+            variant="body2"
+            color="inherit"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href=('/search?genre=Adventure')
+            }}
+          >
+            Adventure
+          </Link>
+
+          <Link
+          className={classes.link}
+            component="button"
+            variant="body2"
+            color="inherit"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href=('/search?genre=Crime')
+            }}
+          >
+            Crime
+          </Link>
+
+          <Link
+          className={classes.link}
+            component="button"
+            variant="body2"
+            color="inherit"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href=('/search?genre=Romance')
+            }}
+          >
+            Romance
+          </Link>
+
+          <Link
+          className={classes.link}
+            component="button"
+            variant="body2"
+            color="inherit"
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href=('/search?genre=War')
+            }}
+          >
+            War
+          </Link>
+
           <div className={classes.grow} />
 
           {/* check if is login, then display different content on the top right */}
