@@ -52,7 +52,6 @@ router.get('/search', (req, res, next) => {
     console.log(genre);
     const name = req.query.name;
     console.log(name);
-    const result = {}
 
     if (genre) {
         Movie.find({genre: { $regex : new RegExp(genre, "i") }}).then(movies => {
@@ -89,12 +88,11 @@ router.get('/:id', (req, res, next) => {
     });
 });
 
-// 5dec666d5d65c80639e9e8d9
 router.post('/:id', passport.authenticate('jwt'), (req, res, next) => {
     const review = new Review({
         title: req.body.title,
         content: req.body.content,
-        user_id: req.body.user_id,
+        user_id: req.user._id,
         movie_id: req.params.id
     });
     review.save().then(createdReview => {
@@ -112,7 +110,7 @@ router.put('/:id', passport.authenticate('jwt'), (req, res, next) => {
     };
 
     Review.findOne({_id: req.params.id}).then(review => {
-        review.updateOne({user_id: req.user.user_id}, new_review, {new: true}).then(result => {
+        review.updateOne({user_id: req.user._id}, new_review, {new: true}).then(result => {
             res.status(200).json({
                 message: "Update review successful!",
                 result: result
@@ -129,18 +127,10 @@ router.put('/:id', passport.authenticate('jwt'), (req, res, next) => {
             message: "No review"
         });
     });
-
-    // Review.findByIdAndUpdate(req.params.id, review, {new: true}).then(result => {
-    //     res.status(200).json({
-    //         message: "Update review successful!",
-    //         result: result,
-    //     });
-    // }).catch(err => {
-    //     console.log(err);
-    //     res.status(500).json(err);
-    // })
 });
 
+
+//
 router.delete('/:id', passport.authenticate('jwt'), (req, res, next) => {
     if (req.user.isAdmin) {
         Review.deleteOne({_id: req.params.id}).then(result => {
@@ -153,7 +143,7 @@ router.delete('/:id', passport.authenticate('jwt'), (req, res, next) => {
             });
         });
     } else {
-        Review.deleteOne({_id: req.params.id, user_id: req.user.user_id}).then(result => {
+        Review.deleteOne({_id: req.params.id, user_id: req.user._id}).then(result => {
             res.status(200).json({
                 message: "delete review successful!",
                 result: result

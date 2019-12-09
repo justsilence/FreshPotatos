@@ -88,8 +88,8 @@ router.post('/login', (req, res, next) => {
 
 
 router.get('/profile', passport.authenticate('jwt'), (req, res, next) => {
-    User.findOne({_id: req.user.user_id}).then(user => {
-        Review.find({user_id: req.user.user_id}).then(reviews => {
+    User.findOne({_id: req.user._id}).then(user => {
+        Review.find({user_id: req.user._id}).then(reviews => {
             res.json({
                 message: "access profile success!",
                 profile: user,
