@@ -153,7 +153,7 @@ router.delete('/:id', passport.authenticate('jwt'), (req, res, next) => {
             });
         });
     } else {
-        Review.deleteOne({_id: req.params.id, user_id: req.user.user_id}).then(result => {
+        Review.deleteOne({_id: req.params.id, user_id: req.user._id}).then(result => {
             res.status(200).json({
                 message: "delete review successful!",
                 result: result
