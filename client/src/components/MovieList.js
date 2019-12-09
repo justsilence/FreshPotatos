@@ -84,7 +84,7 @@ class MovieList extends React.Component{
                 </GridListTile>
                 {this.state.movies.map(m => (
                   <GridListTile key={m.id} >
-                     <img src={m.image} alt={m.name} />
+                     <img src={m.image} alt={m.name} onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}}/>
                      <GridListTileBar
                       title={m.name}
               subtitle={<span>rating: {m.rating}</span>}
