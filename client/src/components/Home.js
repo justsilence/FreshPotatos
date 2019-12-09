@@ -5,6 +5,10 @@ import { Slide } from 'react-slideshow-image';
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/Info';
+
 
 import { Button } from '@material-ui/core';
  
@@ -22,6 +26,10 @@ const useStyles = makeStyles(theme => ({
   },
   icon: {
     color: 'rgba(255, 255, 255, 0.54)',
+  },
+  img:{
+    height: 100,
+    width:100
   },
   button: {
     marginRight: theme.spacing(0),
@@ -53,7 +61,8 @@ class Home extends Component{
       this.state = {
         genres: [],
         // movies: [{id: '', trailerURL: ''}, {id: '', trailerURL: ''}, {id: '', trailerURL: ''}]
-        movies: []
+        movies: [],
+        top: []
       }
     }
     
@@ -80,8 +89,22 @@ class Home extends Component{
       .then(res => res.json())
       .then(res => res['movies'])
       .then(movies => movies.map(m => {return {'id': m._id, 'trailerURL': m.trailer.url}}))
-      .then(res => {this.setState({movies: res})})
-      }
+      .then(res => {this.setState({movies: res})});
+      
+
+      const fetchTopURL = 'https://web-final-demo.azurewebsites.net/api/movie/top?n=10';
+      fetch(fetchTopURL,{
+        method : 'GET',
+        headers: new Headers({
+          'Content-type':'application/json'
+        })
+      })
+      .then(res => res.json())
+      .then(res => res['movies'])
+      .then(top => top.map(m => {return {'id': m._id, 'name': m.name, 'img':m.image,'rating':m.rating}}))
+      .then(res => {this.setState({top: res})});
+     
+    }
 
     render() {
         return (
@@ -98,6 +121,24 @@ class Home extends Component{
               </Slide>
             </div>
             <div className={this.props.classes.root}>
+              <GridList cellHeight={180} className={this.props.classes.gridList}>
+                <GridListTile key="Header" cols={2} style={{ height: 70 }}>
+                  <h2 component="div">Top10</h2>
+                </GridListTile>
+                {this.state.top.map(m => (
+                  <GridListTile key={m.img} >
+                     <img src={m.img} alt={m.name} />
+                     <GridListTileBar
+                      title={m.name}
+              subtitle={<span>rating: {m.rating}</span>}
+              actionIcon={
+                <IconButton aria-label={`info about ${m.name}`}  onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}} className={this.props.classes.icon}>
+                  <InfoIcon />
+                </IconButton>
+              }/>
+                </GridListTile>
+                ))}
+              </GridList>
               <GridList cellHeight={50} className={this.props.classes.gridList}>
                 <GridListTile key="Header" cols={2} style={{ height: 70 }}>
                   <h2 component="div">Search By Genre</h2>
@@ -111,6 +152,7 @@ class Home extends Component{
                 ))}
               </GridList>
             </div>
+         
           </div>
         );
       }
