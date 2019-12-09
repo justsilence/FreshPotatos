@@ -24,6 +24,15 @@ const useStyles = makeStyles(theme => ({
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
+    [theme.breakpoints.down('md')]: {
+      height: 800,
+    },
+    [theme.breakpoints.down('sm')]: {
+      height: 1000,
+    },
+    [theme.breakpoints.down('xs')]: {
+      height: 1000,
+    },
   },
   trailer: {
     align: 'right'
@@ -126,7 +135,7 @@ class MovieDetail extends React.Component{
   showTrailer(){
     if (this.state.movieInfoReview.movie.hasOwnProperty('trailer')){
       return (
-        <Grid key={2} item>
+        <Grid item key='movie-trailer'>
         <div className={this.props.classes.movieInfoContent}>
           <iframe
             title={this.state.movieInfoReview.movie.name}
@@ -187,14 +196,14 @@ class MovieDetail extends React.Component{
 
   render() {
     return (
-      <div>
+      <Grid>
         {/* movie information section */}
-        <Paper className={this.props.classes.movieInfo} style={{ backgroundImage: `url(${this.state.movieInfoReview.movie.image})` }}>
-          <div className={this.props.classes.overlay} />
-          <Grid container>
-            {/* movie information */}
-            <Grid item md={4}>
-              <Grid key={1} item>
+        <Grid item md={12}>
+          <Paper className={this.props.classes.movieInfo} style={{ backgroundImage: `url(${this.state.movieInfoReview.movie.image})` }}>
+            <div className={this.props.classes.overlay} />
+            <Grid container>
+              {/* movie information */}
+              <Grid item md={4} key={1}>
                 <div className={this.props.classes.movieInfoContent}>
                   <Typography align='left' component="h1" variant="h3" color="inherit" gutterBottom>
                     {this.state.movieInfoReview.movie.name}
@@ -219,104 +228,107 @@ class MovieDetail extends React.Component{
                   </Typography>
                 </div>
               </Grid>
+              {/* movie trailer */}
+              {this.showTrailer()}
             </Grid>
-            {/* movie trailer */}
-            {this.showTrailer()}
-          </Grid>
-        </Paper>
+          </Paper>
+        </Grid>
 
         {/* user comments section */}
-        <Paper>
-          <Grid container>
-            <Grid item md={12}>
-              {/* add comment section */}
-              <Paper component="form" className={this.props.classes.form} noValidate autoComplete="off">
-                <Typography variant='subtitle2' className={this.props.classes.addCommentTypography}>
-                  Comment:
-                </Typography>
-                <Grid container spacing={5}>
-                  <Grid item md={3}>
-                    <TextField
-                    id="review-title"
-                    label="Title"
-                    placeholder="Title"
-                    variant="outlined"
-                    onChange={(e) => {e.preventDefault(); this.setState({title: e.target.value})}}
-                    className={this.props.classes.addCommentField}
-                    required
-                    >
-                    </TextField>
-                  </Grid>
-                  <Grid item md={9}>
-                    <TextField
-                      id="review-content"
-                      label="Comment"
-                      placeholder="Comment"
-                      multiline
+        <Grid item md={12}>
+          <Paper>
+            <Grid container>
+              <Grid item md={12}>
+                {/* add comment section */}
+                <Paper component="form" className={this.props.classes.form} noValidate autoComplete="off">
+                  <Typography variant='subtitle2' className={this.props.classes.addCommentTypography}>
+                    Comment:
+                  </Typography>
+                  <Grid container spacing={5}>
+                    <Grid item md={3}>
+                      <TextField
+                      id="review-title"
+                      label="Title"
+                      placeholder="Title"
                       variant="outlined"
-                      onChange={(e) => {e.preventDefault(); this.setState({comments: e.target.value})}}
+                      onChange={(e) => {e.preventDefault(); this.setState({title: e.target.value})}}
                       className={this.props.classes.addCommentField}
                       required
-                    >
-                    </TextField>
+                      >
+                      </TextField>
+                    </Grid>
+                    <Grid item md={9}>
+                      <TextField
+                        id="review-content"
+                        label="Comment"
+                        placeholder="Comment"
+                        multiline
+                        variant="outlined"
+                        onChange={(e) => {e.preventDefault(); this.setState({comments: e.target.value})}}
+                        className={this.props.classes.addCommentField}
+                        required
+                      >
+                      </TextField>
+                    </Grid>
                   </Grid>
-                </Grid>
-                
-                <IconButton
-                  className={this.props.classes.addCommentIcon}
-                  type='submit'
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (window.sessionStorage.getItem('is_login')){
-                      this.addReview(this.state.movieInfoReview.movie._id, this.state.title, this.state.comments)
-                    }else{
-                      window.alert('Please login in to comment movie.')
-                    }
-                  }}
-                >
-                  <ArrowForward/>
-                </IconButton>
-              </Paper>
-              <Typography variant='h4'>
-                Reviews
-              </Typography>
-              {/* all user comments */}
-              <List className={this.props.classes.root}>
-                {this.state.movieInfoReview.review.map((r) => {
-                  return (
-                    <div key={r._id}>
-                      <ListItem alignItems='flex-start'>
-                        <ListItemText
-                          primary={
-                            <Typography variant='h6'>
-                              {r.title}
-                            </Typography>
-                          }
-                          secondary={
-                            <React.Fragment>
-                              <Typography
-                                component='span'
-                                variant='button'
-                                className={this.props.classes.block}
-                                color='textPrimary'
-                              >
-                              {r.userName}
+                  
+                  <IconButton
+                    className={this.props.classes.addCommentIcon}
+                    type='submit'
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (window.sessionStorage.getItem('is_login')){
+                        this.addReview(this.state.movieInfoReview.movie._id, this.state.title, this.state.comments)
+                      }else{
+                        window.alert('Please login in to comment movie.')
+                      }
+                    }}
+                  >
+                    <ArrowForward/>
+                  </IconButton>
+                </Paper>
+                <Typography variant='h4'>
+                  Reviews
+                </Typography>
+                {/* all user comments */}
+                <List className={this.props.classes.root}>
+                  {this.state.movieInfoReview.review.map((r) => {
+                    return (
+                      <div key={r._id}>
+                        <ListItem alignItems='flex-start'>
+                          <ListItemText
+                            primary={
+                              <Typography variant='h6'>
+                                {r.title}
                               </Typography>
-                              {r.content}
-                            </React.Fragment>
-                          }
-                        />
-                        {this.adminButton(r._id)}
-                      </ListItem>
-                      <Divider variant="fullWidth" component="li" />
-                    </div>
-                  )
-                })}
-              </List>
+                            }
+                            secondary={
+                              <React.Fragment>
+                                <Typography
+                                  component='span'
+                                  variant='button'
+                                  className={this.props.classes.block}
+                                  color='textPrimary'
+                                >
+                                {r.userName}
+                                </Typography>
+                                {r.content}
+                              </React.Fragment>
+                            }
+                          />
+                          {this.adminButton(r._id)}
+                        </ListItem>
+                        <Divider variant="fullWidth" component="li" />
+                      </div>
+                    )
+                  })}
+                </List>
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
-      </div>
+          </Paper>
+        </Grid>
+        
+      </Grid>
     );
   }
   
