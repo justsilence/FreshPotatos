@@ -29,6 +29,11 @@ const useStyles = makeStyles(theme => ({
     height: theme.spacing(20),
     textAlign: 'center',
     display: 'inline-block',
+    align: 'center',
+    [theme.breakpoints.down('xs')]: {
+      width: theme.spacing(10),
+      height: theme.spacing(10),
+    },
   }
 }));
 
