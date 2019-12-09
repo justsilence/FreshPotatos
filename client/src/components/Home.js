@@ -88,7 +88,7 @@ class Home extends Component{
       })
       .then(res => res.json())
       .then(res => res['movies'])
-      .then(movies => movies.map(m => {return {'id': m._id, 'trailerURL': m.trailer.url}}))
+      .then(movies => movies.map(m => {return {'id': m._id,  'name': m.name, 'trailerURL': m.trailer.url}}))
       .then(res => {this.setState({movies: res})});
       
 
@@ -113,7 +113,8 @@ class Home extends Component{
               <Slide {...properties}>
                 {this.state.movies.map(movie => (
                   <div key={movie.id}>
-                  <iframe title={movie.id} src={movie.trailerURL} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                  <iframe title={movie.id} src={movie.trailerURL}allowFullScreen></iframe>
+                <h2>{movie.name}</h2>
                   <br/> 
                   <Button className={this.props.classes.button} onClick = {(e)=>{e.preventDefault(); window.location.href=('/detail/'+movie.id)}}>Detail</Button>
                   </div>
