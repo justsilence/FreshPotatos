@@ -156,8 +156,8 @@ class MovieDetail extends React.Component{
     .then(res => window.location.reload(true))
   }
 
-  adminButton(is_admin, id){
-    if (is_admin === 'true'){
+  adminButton(id){
+    if (window.sessionStorage.getItem('is_admin') === 'true'){
       return (
         <ListItemSecondaryAction key='button'>
           <IconButton onClick={(e) => {e.preventDefault(); this.deleteReview(id)}} edge="end" aria-label="delete">
@@ -337,7 +337,7 @@ class MovieDetail extends React.Component{
                             </React.Fragment>
                           }
                         />
-                        {this.adminButton(window.sessionStorage.getItem('is_admin'), r._id)}
+                        {this.adminButton(r._id)}
                       </ListItem>
                       <Divider variant="fullWidth" component="li" />
                     </div>
