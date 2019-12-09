@@ -49,5 +49,16 @@ iframe{
   max-height:100%;
 }
 
+@media screen and (max-width:800px) {
+  .slide-container {
+    height:70%;
+    width: 90%;
+    margin: auto; }
+
+iframe{
+  max-width:100%;
+  max-height:100%;
+}
+}
 
 
