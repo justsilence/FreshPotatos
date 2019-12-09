@@ -10,7 +10,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import ArrowRight from '@material-ui/icons/ArrowRight';
-import MovieIcon from '@material-ui/icons/Movie';
+// import MovieIcon from '@material-ui/icons/Movie';
 
 // self defined styles
 const useStyles = makeStyles(theme => ({
@@ -37,6 +37,8 @@ class MovieList extends React.Component{
   componentDidMount(){
     // mount the date fetch from the specific URL
     var fetchURL = '';
+    console.log('this.props');
+    console.log(this.props.routerProps.fetchURL);
     if (this.props.routerProps.fetchURL){
       fetchURL = this.props.routerProps.fetchURL;
       fetch(fetchURL, {
@@ -47,7 +49,7 @@ class MovieList extends React.Component{
       })
       .then(res => res.json())
       .then(res => res['movies'])
-      .then(movies => movies.map((movie) => {return {'name': movie.name, 'id': movie._id}}))
+      .then(movies => movies.map((movie) => {return {'name': movie.name, 'id': movie._id, 'image': movie.image}}))
       .then(movies => this.setState({movies: movies}));
     }else{
       fetchURL = 'https://web-final-demo.azurewebsites.net/api/movie/search' + this.props.routerProps.location.search;
@@ -59,7 +61,7 @@ class MovieList extends React.Component{
       })
       .then(res => res.json())
       .then(res => res['result'])
-      .then(movies => movies.map((movie) => {return {'name': movie.name, 'id': movie._id}}))
+      .then(movies => movies.map((movie) => {return {'name': movie.name, 'id': movie._id, 'image': movie.image}}))
       .then(movies => this.setState({movies: movies}));
     }
   }
@@ -75,9 +77,7 @@ class MovieList extends React.Component{
                 {this.state.movies.map(movie => (
                   <ListItem key={movie.id}>
                     <ListItemAvatar>
-                      <Avatar>
-                        <MovieIcon />
-                      </Avatar>
+                      <Avatar alt={movie.name} src={movie.image} />
                     </ListItemAvatar>
                     <ListItemText primary={movie.name} />
                     <ListItemSecondaryAction>

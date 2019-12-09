@@ -25,6 +25,9 @@ const useStyles = makeStyles(theme => ({
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
   },
+  trailer: {
+    align: 'right'
+  },
   overlay: {
     position: 'absolute',
     top: 0,
@@ -34,6 +37,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: 'rgba(0,0,0,.8)',
   },
   movieInfoContent: {
+    // align: 'left',
     position: 'relative',
     padding: theme.spacing(3),
     [theme.breakpoints.up('md')]: {
@@ -89,8 +93,14 @@ class MovieDetail extends React.Component{
           datePublished:'',
           rating: 0,
           duration: '',
-          contentRating: ''},
-          review:[]},
+          contentRating: '',
+          trailer: {
+            description: '',
+            url: '',
+          }
+        },
+          review:[],
+        },
       title: '',
       comments: '',
     }
@@ -108,7 +118,14 @@ class MovieDetail extends React.Component{
       })
     })
     .then(res => res.json())
-    .then(movieInfoReview => this.setState({movieInfoReview: movieInfoReview}));
+    .then(movieInfo => {
+      // console.log(movieInfoReview);
+          
+
+      this.setState({movieInfoReview: movieInfo});
+
+      console.log(this.state.movieInfoReview.movie.trailer);
+    });
   }
 
   addReview(movieId, reviewTitle, reviewContent){
@@ -159,8 +176,10 @@ class MovieDetail extends React.Component{
           {/* Increase the priority of the hero background image */}
           <div className={this.props.classes.overlay} />
           <Grid container>
-            <Grid item md={6}>
-              <div className={this.props.classes.movieInfoContent}>
+            <Grid item md={4}>
+
+            <Grid key={1} item>
+                <div className={this.props.classes.movieInfoContent}>
                 <Typography align='left' component="h1" variant="h3" color="inherit" gutterBottom>
                   {this.state.movieInfoReview.movie.name}
                 </Typography>
@@ -183,7 +202,58 @@ class MovieDetail extends React.Component{
                   {'Rate:  ' + this.state.movieInfoReview.movie.rating}
                 </Typography>
               </div>
+                </Grid>
+
+            
+            {/* */}
+              
+
+              {/* <div className={this.props.classes.movieInfoContent}>
+                <Typography align='left' component="h1" variant="h3" color="inherit" gutterBottom>
+                  {this.state.movieInfoReview.movie.name}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {'Genre:  ' + this.state.movieInfoReview.movie.genre.join(', ')}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {'Actors:  ' + this.state.movieInfoReview.movie.actor.join(', ')}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {'Directors:  ' + this.state.movieInfoReview.movie.director.join(', ')}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {'PublishedDate:  ' + this.state.movieInfoReview.movie.datePublished}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {this.state.movieInfoReview.movie.description}
+                </Typography>
+                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+                  {'Rate:  ' + this.state.movieInfoReview.movie.rating}
+                </Typography>
+              </div> */}
+              
+                {/* <Grid item md={6}>
+                <Typography align='right'>
+                      <iframe title={this.state.movieInfoReview.movie.name} src={this.state.movieInfoReview.movie.trailer.url} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                    </Typography>
+                </Grid> */}
+                
             </Grid>
+
+            <Grid md={6}>
+
+            
+
+              <Grid key={2} item>
+              <div className={this.props.classes.movieInfoContent}>
+              <Typography align='right'>
+                    <iframe title={this.state.movieInfoReview.movie.name} src={this.state.movieInfoReview.movie.trailer.url} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+                  </Typography>
+                  </div>
+              </Grid>
+            
+            </Grid>
+            
           </Grid>
         </Paper>
         {/* user comments section */}
