@@ -74,7 +74,7 @@ class MovieList extends React.Component{
             <Typography variant="h6" className={this.props.classes.title}/>
             <div className={this.props.classes.demo}>
               <List>
-                {this.state.movies.map(movie => (
+                {this.state.movies === []?(this.state.movies.map(movie => (
                   <ListItem key={movie.id}>
                     <ListItemAvatar>
                       <Avatar alt={movie.name} src={movie.image} />
@@ -86,7 +86,7 @@ class MovieList extends React.Component{
                       </IconButton>
                     </ListItemSecondaryAction>
                   </ListItem>
-                ))}
+                ))):( <h1>Sorry, no results found!</h1>)}
               </List>
             </div>
           </Grid>
