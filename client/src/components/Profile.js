@@ -44,14 +44,16 @@ class Profile extends React.Component{
     this.deleteReview = this.deleteReview.bind(this);
   }
 
-  deleteReview(id){
-    fetch('https://web-final-demo.azurewebsites.net/api/movie/' + id, {
+  deleteReview(review_id){
+    fetch('https://web-final-demo.azurewebsites.net/api/movie/' + review_id, {
       method: 'DELETE',
       headers: new Headers({
         'Content-Type': 'application/json',
         'Authorization': window.sessionStorage.getItem('token')
       })
     })
+    .then(res => res.json())
+    .then(res => window.alert(res.message))
     .then(res => window.location.reload(true))
   }
 
