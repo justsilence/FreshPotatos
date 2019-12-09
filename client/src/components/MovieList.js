@@ -32,13 +32,33 @@ class MovieList extends React.Component{
     this.state = {
       movies: []
     }
+    this.showMovies = this.showMovies.bind(this);
+  }
+
+  showMovies(movies){
+    if (movies.length === 0) {
+      return (<Typography variant="h6">Sorry, no movie found.</Typography>)
+    }else{
+      return (
+        movies.map(movie => (
+          <ListItem key={movie.id}>
+            <ListItemAvatar>
+              <Avatar alt={movie.name} src={movie.image} />
+            </ListItemAvatar>
+            <ListItemText primary={movie.name} />
+            <ListItemSecondaryAction>
+              <IconButton href={'/detail/'+ movie.id} edge="start" aria-label="update">
+                <ArrowRight />
+              </IconButton>
+            </ListItemSecondaryAction>
+          </ListItem>
+          )))
+    }
   }
 
   componentDidMount(){
     // mount the date fetch from the specific URL
     var fetchURL = '';
-    console.log('this.props');
-    console.log(this.props.routerProps.fetchURL);
     if (this.props.routerProps.fetchURL){
       fetchURL = this.props.routerProps.fetchURL;
       fetch(fetchURL, {
@@ -74,19 +94,7 @@ class MovieList extends React.Component{
             <Typography variant="h6" className={this.props.classes.title}/>
             <div className={this.props.classes.demo}>
               <List>
-                {this.state.movies === []?(this.state.movies.map(movie => (
-                  <ListItem key={movie.id}>
-                    <ListItemAvatar>
-                      <Avatar alt={movie.name} src={movie.image} />
-                    </ListItemAvatar>
-                    <ListItemText primary={movie.name} />
-                    <ListItemSecondaryAction>
-                      <IconButton href={'/detail/'+ movie.id} edge="start" aria-label="update">
-                        <ArrowRight />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))):( <h1>Sorry, no results found!</h1>)}
+                {this.showMovies(this.state.movies)}
               </List>
             </div>
           </Grid>
