@@ -220,7 +220,7 @@ export default function Navbar({ component: Component, ...rest }) {
             />
           </Paper>
 
-          <Link
+          {/* <Link
             className={classes.link}
             component="button"
             variant="body2"
@@ -296,7 +296,7 @@ export default function Navbar({ component: Component, ...rest }) {
             }}
           >
             War
-          </Link>
+          </Link> */}
 
           <div className={classes.grow} />
 
