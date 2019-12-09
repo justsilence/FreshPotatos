@@ -128,12 +128,12 @@ class Home extends Component{
                 </GridListTile>
                 {this.state.top.map(m => (
                   <GridListTile key={m.img} >
-                     <img src={m.img} alt={m.name} />
+                     <img src={m.img} alt={m.name} onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}}/>
                      <GridListTileBar
                       title={m.name}
               subtitle={<span>rating: {m.rating}</span>}
               actionIcon={
-                <IconButton aria-label={`info about ${m.name}`}  onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}} className={this.props.classes.icon}>
+                <IconButton aria-label={`info about ${m.name}`} onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}} className={this.props.classes.icon}>
                   <InfoIcon />
                 </IconButton>
               }/>
