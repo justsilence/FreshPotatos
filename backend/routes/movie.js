@@ -141,6 +141,8 @@ router.put('/:id', passport.authenticate('jwt'), (req, res, next) => {
     // })
 });
 
+
+//
 router.delete('/:id', passport.authenticate('jwt'), (req, res, next) => {
     if (req.user.isAdmin) {
         Review.deleteOne({_id: req.params.id}).then(result => {
