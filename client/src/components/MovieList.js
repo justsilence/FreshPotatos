@@ -1,15 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import ArrowRight from '@material-ui/icons/ArrowRight';
 // import MovieIcon from '@material-ui/icons/Movie';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
@@ -72,20 +64,6 @@ class MovieList extends React.Component{
                 </GridListTile>
             ))
             )
-        // movies.map(movie => (
-        //   <ListItem key={movie.id}>
-        //     <ListItemAvatar>
-        //       <Avatar alt={movie.name} src={movie.image} />
-        //     </ListItemAvatar>
-        //     <ListItemText primary={movie.name} />
-        //     <ListItemSecondaryAction>
-        //       <IconButton href={'/detail/'+ movie.id} edge="start" aria-label="update">
-        //         <ArrowRight />
-        //       </IconButton>
-        //     </ListItemSecondaryAction>
-        //   </ListItem>
-        //   )))
-      
     }
   }
 
@@ -143,32 +121,6 @@ class MovieList extends React.Component{
                 {this.state.movies.length === 0?(<Typography variant="h6">Sorry, no movie found.</Typography>):(<div></div>)}
               </GridList>
             </div>
-            
-      {/* <div className={this.props.classes.root}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} md={12}>
-            <Typography variant="h6" className={this.props.classes.title}/>
-            <div className={this.props.classes.demo}>
-              <List>
-                {this.state.movies.map(movie => (
-                  <ListItem key={movie.id}>
-                    <ListItemAvatar>
-                      <Avatar alt={movie.name} src={movie.image} />
-                    </ListItemAvatar>
-                    <ListItemText primary={movie.name} />
-                    <ListItemSecondaryAction>
-                      <IconButton href={'/detail/'+ movie.id} edge="start" aria-label="update">
-                        <ArrowRight />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                }
-                {this.showMovies(this.state.movies)}
-              </List>
-            </div>
-          </Grid>
-        </Grid>
-      </div> */}
       </div>
     );
   }

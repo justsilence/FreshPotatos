@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import '../css/Home.css';
 import { Slide } from 'react-slideshow-image';
 
