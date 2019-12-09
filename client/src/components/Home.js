@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import '../css/Home.css';
 import { Slide } from 'react-slideshow-image';
 
@@ -35,85 +36,83 @@ const useStyles = makeStyles(theme => ({
     boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
   },
 }));
- 
+
 const properties = {
   duration: 1000000,
   transitionDuration: 500,
   infinite: true,
   indicators: true,
   arrows: true,
-  onChange: (oldIndex, newIndex) => {
-    // console.log(`slide transition from ${oldIndex} to ${newIndex}`);
-  }
 }
 
 class Home extends Component{
-    constructor(props) {
-      super(props);
-      this.state = {
-        genres: [],
-        // movies: [{id: '', trailerURL: ''}, {id: '', trailerURL: ''}, {id: '', trailerURL: ''}]
-        movies: []
-      }
+  constructor(props) {
+    super(props);
+    this.state = {
+      genres: [],
+      movies: [],
+      iFrameHeight: '',
     }
-    
+  }
 
-    componentDidMount(){
-      const fetchGenreURL = 'https://web-final-demo.azurewebsites.net/api/index';
-      fetch(fetchGenreURL, {
-        method: 'GET',
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
+  componentDidMount(){
+    // fetch all movie genres
+    const fetchGenreURL = 'https://web-final-demo.azurewebsites.net/api/index';
+    fetch(fetchGenreURL, {
+      method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json'
       })
-      .then(res => res.json())
-      .then(res => res['genres'])
-      .then(genres => this.setState({genres: genres}));
+    })
+    .then(res => res.json())
+    .then(res => res['genres'])
+    .then(genres => this.setState({genres: genres}));
     
-      const fetchTrailerURL = 'https://web-final-demo.azurewebsites.net/api/movie/top';
-      fetch(fetchTrailerURL,{
-        method : 'GET',
-        headers: new Headers({
-          'Content-type':'application/json'
-        })
+    // fetch top 3 movies information
+    const fetchTrailerURL = 'https://web-final-demo.azurewebsites.net/api/movie/top';
+    fetch(fetchTrailerURL,{
+      method : 'GET',
+      headers: new Headers({
+        'Content-type':'application/json'
       })
-      .then(res => res.json())
-      .then(res => res['movies'])
-      .then(movies => movies.map(m => {return {'id': m._id, 'trailerURL': m.trailer.url}}))
-      .then(res => {this.setState({movies: res})})
-      }
+    })
+    .then(res => res.json())
+    .then(res => res['movies'])
+    .then(movies => movies.map(m => {return {'id': m._id, 'trailerURL': m.trailer.url}}))
+    .then(res => {this.setState({movies: res})})
+  }
 
-    render() {
-        return (
-          <div><br/>
-            <div className="slide-container">
-              <Slide {...properties}>
-                {this.state.movies.map(movie => (
-                  <div key={movie.id}>
-                  <iframe title={movie.id} src={movie.trailerURL} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                  <br/> 
-                  <Button className={this.props.classes.button} onClick = {(e)=>{e.preventDefault(); window.location.href=('/detail/'+movie.id)}}>Detail</Button>
-                  </div>
-                ))}
-              </Slide>
-            </div>
-            <div className={this.props.classes.root}>
-              <GridList cellHeight={50} className={this.props.classes.gridList}>
-                <GridListTile key="Header" cols={2} style={{ height: 70 }}>
-                  <h2 component="div">Search By Genre</h2>
-                </GridListTile>
-                {this.state.genres.map(genre => (
-                  <GridListTile key={genre} style={{ height: 50 }}>
-                    {<Button className={this.props.classes.button}  onClick ={(e) => {e.preventDefault(); window.location.href=('/search?genre='+genre)}} >
-                      {genre}
-                    </Button>}
-                  </GridListTile>
-                ))}
-              </GridList>
-            </div>
+  render() {
+      return (
+        <div><br/>
+          <div className="slide-container">
+            <Slide {...properties}>
+              {this.state.movies.map(movie => (
+                <div key={movie.id}>
+                <iframe title={movie.id} src={movie.trailerURL} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen ></iframe>
+                <br/> 
+                <Button className={this.props.classes.button} onClick = {(e)=>{e.preventDefault(); window.location.href=('/detail/'+movie.id)}}>Detail</Button>
+                </div>
+              ))}
+            </Slide>
           </div>
-        );
-      }
+          <div className={this.props.classes.root}>
+            <GridList cellHeight={50} className={this.props.classes.gridList}>
+              <GridListTile key="Header" cols={2} style={{ height: 70 }}>
+                <h2 component="div">Search By Genre</h2>
+              </GridListTile>
+              {this.state.genres.map(genre => (
+                <GridListTile key={genre} style={{ height: 50 }}>
+                  {<Button className={this.props.classes.button}  onClick ={(e) => {e.preventDefault(); window.location.href=('/search?genre='+genre)}} >
+                    {genre}
+                  </Button>}
+                </GridListTile>
+              ))}
+            </GridList>
+          </div>
+        </div>
+      );
+  }
 }
 
 export default function Hook(props) {
