@@ -119,17 +119,31 @@ We have learned a lot from this course. First of all, we learned how to design e
 # Documentation
 
 https://material-ui.com/styles/api/
+
 https://www.npmjs.com/package/react-slideshow-image
+
 https://stackoverflow.com/
+
 https://reactjs.org/docs/react-api.html
 https://material-ui.com/styles/api/
+
 https://stackoverflow.com/
+
 https://expressjs.com/en/4x/api.html
+
 https://expressjs.com/en/guide/routing.html
+
 https://mongoosejs.com/docs/queries.html
+
 https://medium.com/quick-code/handling-authentication-and-authorization-with-node-7f9548fedde8
+
 https://medium.com/swlh/jwt-authentication-authorization-in-nodejs-express-mongodb-rest-apis-2019-ad14ec818122
+
 https://www.imdb.com/chart/top/?ref_=nv_mv_250
+
 https://faker.readthedocs.io/en/master/
+
 https://blog.heroku.com/deploying-react-with-zero-configuration
+
+
 
