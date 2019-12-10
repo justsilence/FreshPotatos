@@ -9,9 +9,6 @@ const User = require('../models/user')
 require('../config/passport')(passport);
 
 
-// GET /api/movie/search?name=sdasd
-
-
 router.get('/all', (req, res, next) => {
     Movie.find({}).select('name -_id').then(movies => {
         res.status(200).json({
