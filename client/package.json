@@ -35,5 +35,5 @@
       "last 1 safari version"
     ]
   },
-  "proxy": "https://web-final-demo.azurewebsites.net"
+  "proxy": "http://localhost:3001"
 }
