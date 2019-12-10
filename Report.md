@@ -9,48 +9,59 @@ This is a Movie review website which provides movie information and welcomes use
 ## Sign up
 
 On this page, users can sign up with email, password and user name.
+
 ![signup](./images/signup.png)
 
 ## Login
 Users can log in on this page, visitors can also direct to sign up page in this page.
+
 ![signin](./images/SignIn.png)
 
 If the email address typed in is not in the right format, the page will show error message.
+
 ![signinerror1](./images/Signerror1.png)
 
 Also, if the email address or password is wrong, the page will also show related error message.
+
 ![signinerror2](./images/signinerror2.png)
 
 ## HomePage
 
 On the navigation bar, we have mini list on left side that can direct us to home page and movie list page, we also have search function that can redirect users to the movie list page based on the word they typed. We also have login function on the right side, after the user logged in, it will change to a mini list button with user name on it.
+
 ![home1](./images/home1.png)
 ![home2](./images/home2.png)
 
 There’re three top movie trailers, and we can watch each trailer by click the play button. We can also click the detail button to see the detail of each movie.
+
 ![home3](./images/home3.png)
 
 we can see Top10 movies on the left side, we can see each movie’s detail page by click the small info button. The right side are the whole genres, we can see the movie list in each genre by click each button.
+
 ![top10](./images/top10.png)
 
 ## Profile
 
 On this page, users can see their own name and email, they can also manage their comments. Normal users can only manage their own reviews, but admin users can manage all comments in the database. They can delete certain comments that contains certain word.
+
 ![Adminprofile](./images/Adminprofile.png)
 
 ## Movie Detail
 
 This page shows the movie detail information including name, genre, actors, directors, trailer, rating and so on. This page also includes the reviews.
+
 ![moviedetail](./images/moviedetail.png)
 
 ## Review
 
 Visitors cannot leave comment without login
+
 ![moviedetail](./images/visitor_comment.png)
 
 ## MovieList
 
 This page shows all movies in our database, if user is redirected to this page by using the search function, the movies showed will base on the searching result.
+
 ![movie_list](./images/movie_list.png)
 
 # Team members contribution
@@ -62,6 +73,7 @@ Deployment & Data Crawler & Azure: Jie Chen
 # Technical Architecture
 
  For this project, we use MERN stack, which is composed of MongoDB, Expressjs, Reactjs and Nodejs. MongoDB is used as database, Reactjs is used as frontend, and Expressjs and Nodejs are used as backend.
+ 
  ![mern](./images/mern.png)
 
  The diagram below shows the working process of our website. For example, when a user wants to sign up in our website, the client side will send a request and the server side will send a Token which will be stored in frontend session storge. After that, client side need to send the request with the token back to server side. Once the client side sent request without token, we can assume that the user has already logged out. We use this way to maintain user's loggin status is because we use RESTful architecture style, which is stateless.  
