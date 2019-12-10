@@ -9,7 +9,17 @@ const User = require('../models/user')
 require('../config/passport')(passport);
 
 
-// GET /api/movie/search?name=sdasd
+router.get('/all', (req, res, next) => {
+    Movie.find({}).select('name -_id').then(movies => {
+        res.status(200).json({
+            movies: movies
+        });
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+});
 
 router.get('/top', (req, res, next) => {
     let n = req.query.n;
@@ -52,7 +62,6 @@ router.get('/search', (req, res, next) => {
     console.log(genre);
     const name = req.query.name;
     console.log(name);
-    const result = {}
 
     if (genre) {
         Movie.find({genre: { $regex : new RegExp(genre, "i") }}).then(movies => {
@@ -112,7 +121,7 @@ router.put('/:id', passport.authenticate('jwt'), (req, res, next) => {
     };
 
     Review.findOne({_id: req.params.id}).then(review => {
-        review.updateOne({user_id: req.user.user_id}, new_review, {new: true}).then(result => {
+        review.updateOne({user_id: req.user._id}, new_review, {new: true}).then(result => {
             res.status(200).json({
                 message: "Update review successful!",
                 result: result
@@ -129,18 +138,10 @@ router.put('/:id', passport.authenticate('jwt'), (req, res, next) => {
             message: "No review"
         });
     });
-
-    // Review.findByIdAndUpdate(req.params.id, review, {new: true}).then(result => {
-    //     res.status(200).json({
-    //         message: "Update review successful!",
-    //         result: result,
-    //     });
-    // }).catch(err => {
-    //     console.log(err);
-    //     res.status(500).json(err);
-    // })
 });
 
+
+//
 router.delete('/:id', passport.authenticate('jwt'), (req, res, next) => {
     if (req.user.isAdmin) {
         Review.deleteOne({_id: req.params.id}).then(result => {

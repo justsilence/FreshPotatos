@@ -1,15 +1,18 @@
 import React, { Component } from 'react';
 import '../css/Home.css';
 import { Slide } from 'react-slideshow-image';
-
 import { makeStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import GridListTileBar from '@material-ui/core/GridListTileBar';
+import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/Info';
+
 
 import { Button } from '@material-ui/core';
  
 const useStyles = makeStyles(theme => ({
-  root: {
+  topMovies: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
@@ -18,9 +21,9 @@ const useStyles = makeStyles(theme => ({
   },
   gridList: {
     width: 500,
-    height: 450,
+    height: 650,
   },
-  icon: {
+  genreIconButton: {
     color: 'rgba(255, 255, 255, 0.54)',
   },
   button: {
@@ -36,51 +39,118 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-// const slideIframes = [
-//   'https://www.youtube.com/embed/jCFWEzIVILc',
-//   'https://www.youtube.com/embed/kR_gi_kEbPE',
-// "https://www.imdb.com/videoembed/vi1298770969",
-//   'https://www.youtube.com/embed/RxAtuMu_ph4',
-//   'https://www.youtube.com/embed/r7rcE7bhCFE'
-  
-// ];
- 
-const properties = {
+const slideProperties = {
   duration: 1000000,
   transitionDuration: 500,
   infinite: true,
   indicators: true,
   arrows: true,
-  onChange: (oldIndex, newIndex) => {
-    // console.log(`slide transition from ${oldIndex} to ${newIndex}`);
-  }
 }
 
 class Home extends Component{
-    constructor(props) {
-      super(props);
-      this.state = {
-        genres: [],
-        // movies: [{id: '', trailerURL: ''}, {id: '', trailerURL: ''}, {id: '', trailerURL: ''}]
-        movies: []
-      }
-    }
-    
 
-    componentDidMount(){
-      const fetchGenreURL = 'https://web-final-demo.azurewebsites.net/api/index';
-      fetch(fetchGenreURL, {
-        method: 'GET',
-        headers: new Headers({
-          'Content-Type': 'application/json'
-        })
+  constructor(props) {
+    super(props);
+    this.state = {
+      genres: [],
+      movies: [],
+      top: []
+    }
+    this.showTrailerSlider = this.showTrailerSlider.bind(this);
+    this.showTopMovies = this.showTopMovies.bind(this);
+    this.showAllGenres = this.showAllGenres.bind(this);
+  }
+
+  showTrailerSlider(){
+    return (
+      <div className="slide-container">
+        <Slide {...slideProperties}>
+          {this.state.movies.map(movie => (
+            <div key={movie.id}>
+            <iframe title={movie.id} src={movie.trailerURL}allowFullScreen></iframe>
+          <h2>{movie.name}</h2>
+            <br/> 
+            <Button className={this.props.classes.button} onClick = {(e)=>{e.preventDefault(); window.location.href=('/detail/'+movie.id)}}>Detail</Button>
+            </div>
+          ))}
+        </Slide>
+      </div>
+    )
+  }
+
+  showTopMovies(){
+    return (
+      <GridList cellHeight={230} className={this.props.classes.gridList}>
+        <GridListTile key="Header" cols={2} style={{ height: 70 }}>
+          <h2 component="div">Top10</h2>
+        </GridListTile>
+        {this.state.top.map(m => (
+          <GridListTile key={m.img} >
+              <img src={m.img} alt={m.name} onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}}/>
+              <GridListTileBar
+              title={m.name}
+              subtitle={<span>rating: {m.rating}</span>}
+              actionIcon={
+                <IconButton 
+                  aria-label={`info about ${m.name}`}
+                  onClick ={(e) => {e.preventDefault(); window.location.href=('/detail/'+m.id)}}
+                  className={this.props.classes.genreIconButton}
+                >
+                  <InfoIcon />
+                </IconButton>
+              }/>
+        </GridListTile>
+        ))}
+      </GridList>
+    )
+  }
+
+  showAllGenres(){
+    return (
+      <GridList cellHeight={50} className={this.props.classes.gridList}>
+        <GridListTile key="Header" cols={2} style={{ height: 70 }}>
+          <h2 component="div">Search By Genre</h2>
+        </GridListTile>
+        {this.state.genres.map(genre => (
+          <GridListTile key={genre} style={{ height: 50 }}>
+            {<Button className={this.props.classes.button}  onClick ={(e) => {e.preventDefault(); window.location.href=('/search?genre='+genre)}} >
+              {genre}
+            </Button>}
+          </GridListTile>
+        ))}
+      </GridList>
+    )
+  }
+
+  componentDidMount(){
+    // fetch all movie genres (used for all movie genres section)
+    const fetchGenreURL = 'https://web-final-demo.azurewebsites.net/api/index';
+    fetch(fetchGenreURL, {
+      method: 'GET',
+      headers: new Headers({
+        'Content-Type': 'application/json'
       })
+    })
+    .then(res => res.json())
+    .then(res => res['genres'])
+    .then(genres => this.setState({genres: genres}));
+
+    // fetch top 3 movies information (used for movie trailer section)
+    const fetchTrailerURL = 'https://web-final-demo.azurewebsites.net/api/movie/top';
+    fetch(fetchTrailerURL,{
+      method : 'GET',
+      headers: new Headers({
+        'Content-type':'application/json'
+      })
+    })
       .then(res => res.json())
-      .then(res => res['genres'])
-      .then(genres => this.setState({genres: genres}));
-    
-      const fetchTrailerURL = 'https://web-final-demo.azurewebsites.net/api/movie/top';
-      fetch(fetchTrailerURL,{
+      .then(res => res['movies'])
+      .then(movies => movies.map(m => {return {'id': m._id,  'name': m.name, 'trailerURL': m.trailer.url}}))
+      .then(res => {this.setState({movies: res})});
+
+      // fetch top 10 movies information (used for to 10 movies section)
+      const fetchTopURL = 'https://web-final-demo.azurewebsites.net/api/movie/top?n=10';
+      fetch(fetchTopURL,{
         method : 'GET',
         headers: new Headers({
           'Content-type':'application/json'
@@ -88,51 +158,29 @@ class Home extends Component{
       })
       .then(res => res.json())
       .then(res => res['movies'])
-      .then(movies => movies.map(m => {return {'id': m._id, 'trailerURL': m.trailer.url}}))
-      .then(res => {this.setState({movies: res}, () =>  {
-        console.log(this.state.movies);
-      })})
-      }
+      .then(top => top.map(m => {return {'id': m._id, 'name': m.name, 'img':m.image,'rating':m.rating}}))
+      .then(res => {this.setState({top: res})});
+     
+    }
 
-    render() {      
+    render() {
         return (
-          <div>
-            <br/>
-              <div className="slide-container">
-                {/* {console.log(this.state)} */}
-        <Slide {...properties}>
-        {this.state.movies.map(movie => (
-          <div key={movie.id}>
-          <iframe title='1' src={movie.trailerURL} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-          <br/> 
-          <Button className={this.props.classes.button} onClick = {(e)=>{e.preventDefault(); window.location.href=('/detail/'+movie.id)}}>Detail</Button>
+          <div><br/>
+            {/* trailer slider section */}
+            {this.showTrailerSlider()}<br/>
+            <div className={this.props.classes.topMovies}>
+              {/* Top 10 movies section */}
+              {this.showTopMovies()}
+              {/* movie genres section */}
+              {this.showAllGenres()}
+            </div>
           </div>
-        ))}
-        </Slide>
-      </div>
-      <div className={this.props.classes.root}>
-      <GridList cellHeight={50} className={this.props.classes.gridList}>
-        <GridListTile /*key="Header"*/ cols={2} style={{ height: 70 }}>
-          <h2 component="div">Search By Genre</h2>
-        </GridListTile>
-        {this.state.genres.map(genre => (
-          <GridListTile key={genre} style={{ height: 50 }}>
-            {<Button className={this.props.classes.button}  onClick ={(e) => {e.preventDefault(); window.location.href=('/search?genre='+genre)}} >
-                  {genre}
-                </Button>
-                }
-
-          </GridListTile>
-        ))}
-      </GridList>
-    </div>
-
-          </div>
-        );
-      }
+      );
+  }
 }
 
+// use Hook to wrap styles classes with Home component
 export default function Hook(props) {
   const classes = useStyles();
-  return <Home classes={classes} routerProps={props}>Hook</Home>;  
+  return <Home classes={classes} routerProps={props}>Hook</Home>;
 }

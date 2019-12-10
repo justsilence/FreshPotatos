@@ -7,18 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
-import Link from '@material-ui/core/Link';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import MoreIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles(theme => ({
-  link: {
-    marginLeft: theme.spacing(2),
-  },
   grow: {
     flexGrow: 1,
   },
@@ -85,6 +81,17 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(1, 5, 1, 5),
     boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
   },
+  buttonNav: {
+    marginRight: theme.spacing(0),
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    borderRadius: theme.spacing(1),
+    border: theme.spacing(0),
+    color: 'white',
+    height: theme.spacing(5),
+    width: theme.spacing(5),
+    padding: theme.spacing(1, 5, 1, 5),
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+  },
 }));
 
 export default function Navbar({ component: Component, ...rest }) {
@@ -101,15 +108,12 @@ export default function Navbar({ component: Component, ...rest }) {
   const isNavMenuOpen = Boolean(navAnchorEl);
 
   const handleProfileMenuOpen = event => { setAnchorEl(event.currentTarget); };
-
+  const handleProfileMenuClose = event => { setAnchorEl(null); }
   const handleMobileMenuOpen = event => { setMobileMoreAnchorEl(event.currentTarget); };
   const handleMobileMenuClose = () => { setMobileMoreAnchorEl(null); };
-  
   const handleMenuClose = () => { setAnchorEl(null); handleMobileMenuClose(); };
-
   const handleNavMenuOpen = event => { setNavAnchorEl(event.currentTarget); };
   const handleNavMenuClose = () => { setNavAnchorEl(null); };
-
   const handleLogoutButton = () => { window.sessionStorage.clear(); window.location.href='/login' }
   const handleProfileButton = () => { window.location.href='/profile' }
   const searchOperator = (e) => {
@@ -169,7 +173,7 @@ export default function Navbar({ component: Component, ...rest }) {
 
   // mobile version for above components
   const renderMobileMenu = (
-  <Menu
+    <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id='primary-search-account-menu-mobile'
@@ -208,8 +212,9 @@ export default function Navbar({ component: Component, ...rest }) {
           <Typography className={classes.title} variant="h6" noWrap>
            Fresh Potatoes
           </Typography>
+          {/* search area */}
           <Paper component="form" className={classes.search}>
-            <IconButton type="button" onClick={searchOperator} className={classes.searchIcon} aria-label="search">
+            <IconButton type="submit" onClick={searchOperator} className={classes.searchIcon} aria-label="search">
               <SearchIcon />
             </IconButton>
             <InputBase
@@ -220,94 +225,18 @@ export default function Navbar({ component: Component, ...rest }) {
             />
           </Paper>
 
-          <Link
-            className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=Drama')
-            }}
-          >
-            Drama
-          </Link>
-          
-          <Link
-          className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=Action')
-            }}
-          >
-            Action
-          </Link>
-
-          <Link
-          className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=Adventure')
-            }}
-          >
-            Adventure
-          </Link>
-
-          <Link
-          className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=Crime')
-            }}
-          >
-            Crime
-          </Link>
-
-          <Link
-          className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=Romance')
-            }}
-          >
-            Romance
-          </Link>
-
-          <Link
-          className={classes.link}
-            component="button"
-            variant="body2"
-            color="inherit"
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href=('/search?genre=War')
-            }}
-          >
-            War
-          </Link>
-
           <div className={classes.grow} />
-
-          {/* check if is login, then display different content on the top right */}
-
           {/* desktop version */}
+          {/* check if is login, then display different content on the top right */}
           <div className={classes.sectionDesktop} >
           {window.sessionStorage.getItem('is_login') ? 
           (
-            <Button className={classes.button}  edge="end" onClick={handleProfileMenuOpen}>
-              <AccountCircle />
+            <Button className={classes.button}
+              edge="end"
+              onClick={handleProfileMenuOpen}
+              onClose={handleProfileMenuClose}
+            >
+              <AccountCircleIcon />
               {window.sessionStorage.getItem('name')}
             </Button>
           ):
@@ -319,15 +248,16 @@ export default function Navbar({ component: Component, ...rest }) {
           </div>
 
           {/* mobile version */}
+          {/* check if is login, then display different content on the top right */}
           <div className={classes.sectionMobile}>
           {window.sessionStorage.getItem('is_login') ? 
           (
-            <Button className={classes.button} onClick={handleMobileMenuOpen} >
+            <Button className={classes.buttonNav} onClick={handleMobileMenuOpen} >
               <MoreIcon />
             </Button>
           ):
           (
-            <Button className={classes.button} onClick={event =>  window.location.href='/login'}>
+            <Button className={classes.buttonNav} onClick={event =>  window.location.href='/login'}>
               LogIn
             </Button>)}
           </div>

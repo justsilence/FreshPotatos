@@ -9,9 +9,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 import TextField from '@material-ui/core/TextField';
-import ArrowForward from '@material-ui/icons/ArrowForward';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ArrowForwardIcon from '@material-ui/icons/ArrowForward';
 
 const useStyles = makeStyles(theme => ({
   movieInfo: {
@@ -24,6 +24,15 @@ const useStyles = makeStyles(theme => ({
     backgroundSize: 'cover',
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
+    [theme.breakpoints.down('md')]: {
+      height: 800,
+    },
+    [theme.breakpoints.down('sm')]: {
+      height: 1000,
+    },
+    [theme.breakpoints.down('xs')]: {
+      height: 1000,
+    },
   },
   trailer: {
     align: 'right'
@@ -37,7 +46,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: 'rgba(0,0,0,.8)',
   },
   movieInfoContent: {
-    // align: 'left',
     position: 'relative',
     padding: theme.spacing(3),
     [theme.breakpoints.up('md')]: {
@@ -72,8 +80,6 @@ const useStyles = makeStyles(theme => ({
   addCommentTypography: {
     margin: theme.spacing(2, 2, 2, 2),
   },
-  addCommentField: {
-  },
 }));
 
 class MovieDetail extends React.Component{
@@ -107,10 +113,13 @@ class MovieDetail extends React.Component{
     this.adminButton = this.adminButton.bind(this);
     this.deleteReview = this.deleteReview.bind(this);
     this.addReview = this.addReview.bind(this);
+    this.showMovieInfo = this.showMovieInfo.bind(this);
+    this.showTrailer = this.showTrailer.bind(this);
+    this.showAddComment = this.showAddComment.bind(this);
+    this.showAllComments = this.showAllComments.bind(this);
   }
 
   componentDidMount(){
-    // mount the date fetch from the specific URL
     fetch(this.state.fetchURL, {
       method: 'GET',
       headers: new Headers({
@@ -119,22 +128,159 @@ class MovieDetail extends React.Component{
     })
     .then(res => res.json())
     .then(movieInfo => {
-      // console.log(movieInfoReview);
-          
-
       this.setState({movieInfoReview: movieInfo});
-
-      console.log(this.state.movieInfoReview.movie.trailer);
     });
+  }
+
+  showMovieInfo(){
+    return (
+      <Grid item md={4} key={1}>
+        <div className={this.props.classes.movieInfoContent}>
+          <Typography align='left' component="h1" variant="h3" color="inherit" gutterBottom>
+            {this.state.movieInfoReview.movie.name}
+          </Typography>
+          <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+            {'Genre:  ' + this.state.movieInfoReview.movie.genre.join(', ')}
+          </Typography>
+          <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+            {'Actors:  ' + this.state.movieInfoReview.movie.actor.join(', ')}
+          </Typography>
+          <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+            {'Directors:  ' + this.state.movieInfoReview.movie.director.join(', ')}
+          </Typography>
+          <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+            {'PublishedDate:  ' + this.state.movieInfoReview.movie.datePublished}
+          </Typography>
+          <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+            {this.state.movieInfoReview.movie.description}
+          </Typography>
+          <Typography align='left' variant="subtitle1" color="inherit" paragraph>
+            {'Rate:  ' + this.state.movieInfoReview.movie.rating}
+          </Typography>
+        </div>
+      </Grid>
+    )
+  }
+
+  showTrailer(){
+    if (this.state.movieInfoReview.movie.hasOwnProperty('trailer')){
+      return (
+        <Grid item key='movie-trailer'>
+        <div className={this.props.classes.movieInfoContent}>
+          <iframe
+            title={this.state.movieInfoReview.movie.name}
+            src={this.state.movieInfoReview.movie.trailer.url}
+            frameBorder="0"
+            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          >
+          </iframe>
+        </div>
+      </Grid>
+      )
+    }else{ return }
+  }
+
+  showAddComment(){
+    return (
+      <Paper component="form" className={this.props.classes.form} noValidate autoComplete="off">
+        <Typography variant='subtitle2' className={this.props.classes.addCommentTypography}>
+          Comment:
+        </Typography>
+        <Grid container spacing={5}>
+          <Grid item md={3}>
+            <TextField
+            id="review-title"
+            label="Title"
+            placeholder="Title"
+            variant="outlined"
+            onChange={(e) => {e.preventDefault(); this.setState({title: e.target.value})}}
+            className={this.props.classes.addCommentField}
+            required
+            >
+            </TextField>
+          </Grid>
+          <Grid item md={9}>
+            <TextField
+              id="review-content"
+              label="Comment"
+              placeholder="Comment"
+              multiline
+              variant="outlined"
+              onChange={(e) => {e.preventDefault(); this.setState({comments: e.target.value})}}
+              className={this.props.classes.addCommentField}
+              required
+            >
+            </TextField>
+          </Grid>
+        </Grid>
+        <IconButton
+          className={this.props.classes.addCommentIcon}
+          type='submit'
+          onClick={(e) => {
+            e.preventDefault();
+            if (window.sessionStorage.getItem('is_login')){
+              this.addReview(this.state.movieInfoReview.movie._id, this.state.title, this.state.comments)
+            }else{
+              window.alert('Please login in to comment movie.')
+            }
+          }}
+        >
+          <ArrowForwardIcon/>
+        </IconButton>
+      </Paper>
+    )
+  }
+
+  showAllComments(){
+    return (
+      <>
+      <Typography variant='h4'>
+        Reviews
+      </Typography>
+      <List className={this.props.classes.root}>
+        {this.state.movieInfoReview.review.map((r) => {
+          return (
+            <div key={r._id}>
+              <ListItem alignItems='flex-start'>
+                <ListItemText
+                  primary={
+                    <Typography variant='h6'>
+                      {r.title}
+                    </Typography>
+                  }
+                  secondary={
+                    <React.Fragment>
+                      <Typography
+                        component='span'
+                        variant='button'
+                        className={this.props.classes.block}
+                        color='textPrimary'
+                      >
+                      {r.userName}
+                      </Typography>
+                      {r.content}
+                    </React.Fragment>
+                  }
+                />
+                {this.adminButton(r._id)}
+              </ListItem>
+              <Divider variant="fullWidth" component="li" />
+            </div>
+          )
+        })}
+      </List>
+      </>
+    )
   }
 
   addReview(movieId, reviewTitle, reviewContent){
     if (reviewTitle === '' || reviewContent === ''){
       window.alert('Please input title or comment')
     }else{
-      fetch('https://web-final-demo.azurewebsites.net/api/review', {
+      fetch('https://web-final-demo.azurewebsites.net/api/movie/'+movieId, {
         method: 'POST',
-        body: JSON.stringify({'title': reviewTitle, 'content': reviewContent, 'movie_id': movieId}),
+        body: JSON.stringify({'title': reviewTitle, 'content': reviewContent}),
         headers: new Headers({
           'Content-Type': 'application/json',
           'Authorization': window.sessionStorage.getItem('token')
@@ -145,8 +291,8 @@ class MovieDetail extends React.Component{
     }
   }
 
-  deleteReview(id){
-    fetch('https://web-final-demo.azurewebsites.net/api/movie/' + id, {
+  deleteReview(movie_id){
+    fetch('https://web-final-demo.azurewebsites.net/api/movie/' + movie_id, {
       method: 'DELETE',
       headers: new Headers({
         'Content-Type': 'application/json',
@@ -156,11 +302,12 @@ class MovieDetail extends React.Component{
     .then(res => window.location.reload(true))
   }
 
-  adminButton(is_admin, id){
-    if (is_admin === 'true'){
+  adminButton(movie_id){
+    if (!window.sessionStorage.getItem('is_login') === 'true'){ return }
+    if (window.sessionStorage.getItem('is_admin') === 'true'){
       return (
         <ListItemSecondaryAction key='button'>
-          <IconButton onClick={(e) => {e.preventDefault(); this.deleteReview(id)}} edge="end" aria-label="delete">
+          <IconButton onClick={(e) => {e.preventDefault(); this.deleteReview(movie_id)}} edge="end" aria-label="delete">
             <DeleteIcon />
           </IconButton>
         </ListItemSecondaryAction>
@@ -170,189 +317,41 @@ class MovieDetail extends React.Component{
 
   render() {
     return (
-      <div>
+      <Grid>
         {/* movie information section */}
-        <Paper className={this.props.classes.movieInfo} style={{ backgroundImage: `url(${this.state.movieInfoReview.movie.image})` }}>
-          {/* Increase the priority of the hero background image */}
-          <div className={this.props.classes.overlay} />
-          <Grid container>
-            <Grid item md={4}>
-
-            <Grid key={1} item>
-                <div className={this.props.classes.movieInfoContent}>
-                <Typography align='left' component="h1" variant="h3" color="inherit" gutterBottom>
-                  {this.state.movieInfoReview.movie.name}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Genre:  ' + this.state.movieInfoReview.movie.genre.join(', ')}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Actors:  ' + this.state.movieInfoReview.movie.actor.join(', ')}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Directors:  ' + this.state.movieInfoReview.movie.director.join(', ')}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'PublishedDate:  ' + this.state.movieInfoReview.movie.datePublished}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {this.state.movieInfoReview.movie.description}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Rate:  ' + this.state.movieInfoReview.movie.rating}
-                </Typography>
-              </div>
-                </Grid>
-
-            
-            {/* */}
-              
-
-              {/* <div className={this.props.classes.movieInfoContent}>
-                <Typography align='left' component="h1" variant="h3" color="inherit" gutterBottom>
-                  {this.state.movieInfoReview.movie.name}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Genre:  ' + this.state.movieInfoReview.movie.genre.join(', ')}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Actors:  ' + this.state.movieInfoReview.movie.actor.join(', ')}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Directors:  ' + this.state.movieInfoReview.movie.director.join(', ')}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'PublishedDate:  ' + this.state.movieInfoReview.movie.datePublished}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {this.state.movieInfoReview.movie.description}
-                </Typography>
-                <Typography align='left' variant="subtitle1" color="inherit" paragraph>
-                  {'Rate:  ' + this.state.movieInfoReview.movie.rating}
-                </Typography>
-              </div> */}
-              
-                {/* <Grid item md={6}>
-                <Typography align='right'>
-                      <iframe title={this.state.movieInfoReview.movie.name} src={this.state.movieInfoReview.movie.trailer.url} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                    </Typography>
-                </Grid> */}
-                
+        <Grid item md={12}>
+          <Paper className={this.props.classes.movieInfo} style={{ backgroundImage: `url(${this.state.movieInfoReview.movie.image})` }}>
+            <div className={this.props.classes.overlay} />
+            <Grid container>
+              {/* movie information */}
+              {this.showMovieInfo()}
+              {/* movie trailer */}
+              {this.showTrailer()}
             </Grid>
+          </Paper>
+        </Grid>
 
-            <Grid md={6}>
-
-            
-
-              <Grid key={2} item>
-              <div className={this.props.classes.movieInfoContent}>
-              <Typography align='right'>
-                    <iframe title={this.state.movieInfoReview.movie.name} src={this.state.movieInfoReview.movie.trailer.url} frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
-                  </Typography>
-                  </div>
-              </Grid>
-            
-            </Grid>
-            
-          </Grid>
-        </Paper>
         {/* user comments section */}
-        <Paper>
-          <Grid container>
-            <Grid item md={12}>
-              {/* add comment section */}
-              <Paper component="form" className={this.props.classes.form} noValidate autoComplete="off">
-                <Typography variant='subtitle2' className={this.props.classes.addCommentTypography}>
-                  Comment:
-                </Typography>
-                <Grid container spacing={5}>
-                  <Grid item md={3}>
-                    <TextField
-                    id="review-title"
-                    label="Title"
-                    placeholder="Title"
-                    variant="outlined"
-                    onChange={(e) => {e.preventDefault(); this.setState({title: e.target.value})}}
-                    className={this.props.classes.addCommentField}
-                    required
-                    >
-                    </TextField>
-                  </Grid>
-                  <Grid item md={9}>
-                    <TextField
-                      id="review-content"
-                      label="Comment"
-                      placeholder="Comment"
-                      multiline
-                      variant="outlined"
-                      onChange={(e) => {e.preventDefault(); this.setState({comments: e.target.value})}}
-                      className={this.props.classes.addCommentField}
-                      required
-                    >
-                    </TextField>
-                  </Grid>
-                </Grid>
-                
-                <IconButton
-                  className={this.props.classes.addCommentIcon}
-                  type='submit'
-                  onClick={(e) => {
-                    e.preventDefault();
-                    if (window.sessionStorage.getItem('is_login')){
-                      this.addReview(this.state.movieInfoReview.movie._id, this.state.title, this.state.comments)
-                    }else{
-                      window.alert('Please login in to comment movie.')
-                    }
-                  }}
-                >
-                  <ArrowForward/>
-                </IconButton>
-              </Paper>
-              <Typography variant='h4'>
-                Reviews
-              </Typography>
-              {/* all user comments */}
-              <List className={this.props.classes.root}>
-                {this.state.movieInfoReview.review.map((r) => {
-                  return (
-                    <div key={r._id}>
-                      <ListItem alignItems='flex-start'>
-                        <ListItemText
-                          primary={
-                            <Typography variant='h6'>
-                              {r.title}
-                            </Typography>
-                          }
-                          secondary={
-                            <React.Fragment>
-                              <Typography
-                                component='span'
-                                variant='button'
-                                className={this.props.classes.block}
-                                color='textPrimary'
-                              >
-                              {r.userName}
-                              </Typography>
-                              {r.content}
-                            </React.Fragment>
-                          }
-                        />
-                        {this.adminButton(window.sessionStorage.getItem('is_admin'), r._id)}
-                      </ListItem>
-                      <Divider variant="fullWidth" component="li" />
-                    </div>
-                  )
-                })}
-              </List>
+        <Grid item md={12}>
+          <Paper>
+            <Grid container>
+              <Grid item md={12}>
+                {/* add comment section */}
+                {this.showAddComment()}
+                {/* all user comments */}
+                {this.showAllComments()}
+              </Grid>
             </Grid>
-          </Grid>
-        </Paper>
-      </div>
+          </Paper>
+        </Grid>
+        
+      </Grid>
     );
   }
   
 }
 
+// use Hook to wrap styles classes with MovieDetail component
 export default function Hook(props) {
   const classes = useStyles();
   return <MovieDetail classes={classes} routerProps={props}>Hook</MovieDetail>;

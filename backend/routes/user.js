@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-// const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
@@ -53,10 +52,16 @@ router.post('/login', (req, res, next) => {
     passport.authenticate('login', (err, user, info) => {
         if (err) {
             console.log(err);
+            return res.status(500).json({
+                error: err
+            });
         }
         if (info) {
             console.log(info.message);
-            res.send(info.message);
+            return res.status(400).json({
+                auth: false,
+                error: info.message
+            });
         } else {
             req.logIn(user, err => {
                 User.findOne({
@@ -141,78 +146,5 @@ router.get('/auth/google/callback', passport.authenticate('google'), (req, res, 
         message: 'google oauth success',
     });
 });
-
-
-// router.get('/auth/twitter', passport.authenticate('twitter.login'));
-
-// router.get('/auth/twitter/callback', passport.authenticate)
-
-// app.get('/auth/twitter/callback', 
-//   passport.authenticate('twitter', { failureRedirect: '/login' }),
-//   function(req, res) {
-//     // Successful authentication, redirect home.
-//     res.redirect('/');
-//   });
-
-// app.get('/auth/twitter',
-//   passport.authenticate('twitter'));
-
-// router.post('/signup', (req, res, next) => {
-//     bcrypt.hash(req.body.password, 10).then(hashedPassword => {
-//         const email = req.body.email;
-//         const name = email.split('@')[0];
-//         const user = new User({
-//             name: name,
-//             email: req.body.email,
-//             password: hashedPassword,
-//             isAdmin: false
-//         });
-//         user.save().then(result => {
-//             res.status(201).json({
-//                 message: "User created successfully!",
-//                 result: result
-//             });
-//         }).cache(err => {
-//             res.status(500).json({
-//                 message: err
-//             });
-//         });
-//     });
-// });
-
-// router.post('/login', (req, res, next) => {
-//     let fetchedUser;
-//     User.findOne({email: req.body.email}).then(user => {
-//         if (!user) {
-//             return res.status(401).json({
-//                 message: "User does not exist!"
-//             });
-//         }
-//         fetchedUser = user;
-//         return bcrypt.compare(req.body.password, user.password);
-//     }).then(result => {
-//         if (!result) {
-//             return res.status(401).json({
-//                 message: "Password does not match! Try again"
-//             });
-//         }
-//         const token = jwt.sign(
-//             { userId: fetchedUser._id, email: fetchedUser.email },
-//             "a_string_need_to_be_replace_in_production_period", 
-//             { expiresIn: "1h" }
-//         );
-//         res.status(200).json({
-//             token: token
-//         });
-//     }).catch(err => {
-//         return res.status(401).json({
-//             message: err
-//         });
-//     });
-// });
-
-// router.get('/profile', (req, res, next) => {
-    
-// });
 
 module.exports = router;
