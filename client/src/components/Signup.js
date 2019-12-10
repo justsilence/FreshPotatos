@@ -1,33 +1,29 @@
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import InputAdornment from '@material-ui/core/InputAdornment';
-import Person from '@material-ui/icons/PersonPin';
-import Email from '@material-ui/icons/Email';
-import Password from '@material-ui/icons/VpnKey';
-import User from '@material-ui/icons/PermIdentity';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
+import PersonIcon from '@material-ui/icons/PersonPin';
+import EmailIcon from '@material-ui/icons/Email';
+import PasswordIcon from '@material-ui/icons/VpnKey';
+import UserIcon from '@material-ui/icons/PermIdentity';
 
-// generate style attributes
 const useStyles = makeStyles(theme => ({
-  // style for current page
   paper: {
     marginTop: theme.spacing(8),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
   },
-  // style for icon
   icon: {
     margin: theme.spacing(2),
     backgroundColor: theme.palette.secondary.main,
   },
-  // style for email&password input form
   form: {
     width: '100%',
     marginTop: theme.spacing(2),
@@ -35,7 +31,6 @@ const useStyles = makeStyles(theme => ({
   grid: {
     padding: theme.spacing(1),
   },
-  // style for sign in button
   submit: {
     margin: theme.spacing(2, 0, 2),
   },
@@ -89,9 +84,104 @@ class Signup extends React.Component{
       password: '',
       name: '',
     };
+    this.showEmailInput = this.showEmailInput.bind(this);
+    this.showPasswordInput = this.showPasswordInput.bind(this);
+    this.showUserNameInput = this.showUserNameInput.bind(this);
+    this.showButtons = this.showButtons.bind(this);
     this.handleChangeEmail = this.handleChangeEmail.bind(this);
     this.handleChangePassword = this.handleChangePassword.bind(this);
     this.handleChangeName = this.handleChangeName.bind(this);
+  }
+
+  showEmailInput(){
+    return (
+      <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="email"
+        label="Email Address"
+        name="email"
+        value={this.state.email}
+        onChange={this.handleChangeEmail}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <EmailIcon />
+            </InputAdornment>
+          ),
+        }}
+        type='email'
+        autoComplete="email"
+        autoFocus
+      />
+    )
+  }
+  showPasswordInput(){
+    return (
+      <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="password"
+        label="Password"
+        name="password"
+        value={this.state.password}
+        onChange={this.handleChangePassword}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <PasswordIcon />
+            </InputAdornment>
+          ),
+        }}
+        type="password"
+        autoComplete="current-password"
+      />
+    )
+  }
+  showUserNameInput(){
+    return (
+      <TextField
+        variant="outlined"
+        margin="normal"
+        required
+        fullWidth
+        id="name"
+        label="Name"
+        name="name"
+        value={this.state.name}
+        onChange={this.handleChangeName}
+        InputProps={{
+          startAdornment: (
+            <InputAdornment position="start">
+              <UserIcon />
+            </InputAdornment>
+          ),
+        }}
+        type="text"
+      />
+    )
+  }
+  showButtons(){
+    return (
+      <Grid container>
+        <Grid item xs className={this.props.classes.grid}>
+          <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            color="primary"
+            className={this.props.classes.submit}
+            onClick={(e) => {signup(e, this.state.email, this.state.password, this.state.name)}}
+          >
+            Sign Up
+          </Button>
+        </Grid>
+      </Grid>
+    )
   }
   handleChangeEmail(event) { this.setState({email: event.target.value}); }
   handleChangePassword(event) { this.setState({password: event.target.value}); }
@@ -102,87 +192,22 @@ class Signup extends React.Component{
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={this.props.classes.paper}>
+          {/* sign up avatar */}
           <Avatar className={this.props.classes.icon}>
-            <Person />
+            <PersonIcon />
           </Avatar>
           <Typography component="h1" variant="h4">
             Sign Up
           </Typography>
           <form className={this.props.classes.form} noValidate>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              value={this.state.email}
-              onChange={this.handleChangeEmail}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Email />
-                  </InputAdornment>
-                ),
-              }}
-              type='email'
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="password"
-              label="Password"
-              name="password"
-              value={this.state.password}
-              onChange={this.handleChangePassword}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <Password />
-                  </InputAdornment>
-                ),
-              }}
-              type="password"
-              autoComplete="current-password"
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
-              id="name"
-              label="Name"
-              name="name"
-              value={this.state.name}
-              onChange={this.handleChangeName}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <User />
-                  </InputAdornment>
-                ),
-              }}
-              type="text"
-            />
-            <Grid container>
-              <Grid item xs className={this.props.classes.grid}>
-                <Button
-                  type="submit"
-                  fullWidth
-                  variant="contained"
-                  color="primary"
-                  className={this.props.classes.submit}
-                  onClick={(e) => {signup(e, this.state.email, this.state.password, this.state.name)}}
-                >
-                  Sign Up
-                </Button>
-              </Grid>
-            </Grid>
+            {/* email input field */}
+            {this.showEmailInput()}
+            {/* password input field */}
+            {this.showPasswordInput()}
+            {/* user name input field */}
+            {this.showUserNameInput()}
+            {/* sign up button */}
+            {this.showButtons()}
           </form>
         </div>
       </Container>
@@ -190,6 +215,7 @@ class Signup extends React.Component{
   }
 }
 
+// use Hook to wrap styles classes with Signup component
 export default function Hook() {
   const classes = useStyles();
   return <Signup classes={classes}>Hook</Signup>;
