@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const properties = {
+const slideProperties = {
   duration: 1000000,
   transitionDuration: 500,
   infinite: true,
@@ -57,7 +57,6 @@ class Home extends Component{
       super(props);
       this.state = {
         genres: [],
-        // movies: [{id: '', trailerURL: ''}, {id: '', trailerURL: ''}, {id: '', trailerURL: ''}]
         movies: [],
         top: []
       }
@@ -109,7 +108,7 @@ class Home extends Component{
         return (
           <div><br/>
             <div className="slide-container">
-              <Slide {...properties}>
+              <Slide {...slideProperties}>
                 {this.state.movies.map(movie => (
                   <div key={movie.id}>
                   <iframe title={movie.id} src={movie.trailerURL}allowFullScreen></iframe>
