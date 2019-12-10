@@ -7,17 +7,14 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import MoreIcon from '@material-ui/icons/MoreVert';
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper';
+import MenuIcon from '@material-ui/icons/Menu';
+import SearchIcon from '@material-ui/icons/Search';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import MoreIcon from '@material-ui/icons/MoreVert';
 
 const useStyles = makeStyles(theme => ({
-  link: {
-    marginLeft: theme.spacing(2),
-  },
   grow: {
     flexGrow: 1,
   },
@@ -111,15 +108,12 @@ export default function Navbar({ component: Component, ...rest }) {
   const isNavMenuOpen = Boolean(navAnchorEl);
 
   const handleProfileMenuOpen = event => { setAnchorEl(event.currentTarget); };
-
+  const handleProfileMenuClose = event => { setAnchorEl(null); }
   const handleMobileMenuOpen = event => { setMobileMoreAnchorEl(event.currentTarget); };
   const handleMobileMenuClose = () => { setMobileMoreAnchorEl(null); };
-  
   const handleMenuClose = () => { setAnchorEl(null); handleMobileMenuClose(); };
-
   const handleNavMenuOpen = event => { setNavAnchorEl(event.currentTarget); };
   const handleNavMenuClose = () => { setNavAnchorEl(null); };
-
   const handleLogoutButton = () => { window.sessionStorage.clear(); window.location.href='/login' }
   const handleProfileButton = () => { window.location.href='/profile' }
   const searchOperator = (e) => {
@@ -179,7 +173,7 @@ export default function Navbar({ component: Component, ...rest }) {
 
   // mobile version for above components
   const renderMobileMenu = (
-  <Menu
+    <Menu
       anchorEl={mobileMoreAnchorEl}
       anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
       id='primary-search-account-menu-mobile'
@@ -218,6 +212,7 @@ export default function Navbar({ component: Component, ...rest }) {
           <Typography className={classes.title} variant="h6" noWrap>
            Fresh Potatoes
           </Typography>
+          {/* search area */}
           <Paper component="form" className={classes.search}>
             <IconButton type="submit" onClick={searchOperator} className={classes.searchIcon} aria-label="search">
               <SearchIcon />
@@ -231,13 +226,17 @@ export default function Navbar({ component: Component, ...rest }) {
           </Paper>
 
           <div className={classes.grow} />
-          {/* check if is login, then display different content on the top right */}
           {/* desktop version */}
+          {/* check if is login, then display different content on the top right */}
           <div className={classes.sectionDesktop} >
           {window.sessionStorage.getItem('is_login') ? 
           (
-            <Button className={classes.button}  edge="end" onClick={handleProfileMenuOpen}>
-              <AccountCircle />
+            <Button className={classes.button}
+              edge="end"
+              onClick={handleProfileMenuOpen}
+              onClose={handleProfileMenuClose}
+            >
+              <AccountCircleIcon />
               {window.sessionStorage.getItem('name')}
             </Button>
           ):
@@ -249,6 +248,7 @@ export default function Navbar({ component: Component, ...rest }) {
           </div>
 
           {/* mobile version */}
+          {/* check if is login, then display different content on the top right */}
           <div className={classes.sectionMobile}>
           {window.sessionStorage.getItem('is_login') ? 
           (
