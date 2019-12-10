@@ -1,8 +1,17 @@
 
 # Introduction
 
-Team Members: Kai Mo (kam455) Quan Liu (qul16@pitt.edu) Jie Chen (jic136@pitt.edu) Tianqi Xie (tix19)  
-This is a Movie review website which provides movie information and welcomes user to leave comments for each movie.
+Team Members:
+
+Kai Mo (kam455@pitt.edu)
+
+Quan Liu (qul16@pitt.edu)
+
+Jie Chen (jic136@pitt.edu)
+
+Tianqi Xie (tix19@pitt.edu)
+
+This is a Movie review website which provides movie information and welcomes user to leave comments for each movie.  [Fresh Potatoes](https://freshpotatoes.herokuapp.com/)
 
 # Objective
 
@@ -144,6 +153,3 @@ https://www.imdb.com/chart/top/?ref_=nv_mv_250
 https://faker.readthedocs.io/en/master/
 
 https://blog.heroku.com/deploying-react-with-zero-configuration
-
-
-
