@@ -14,8 +14,10 @@ On this page, users can sign up with email, password and user name.
 ## Login
 Users can log in on this page, visitors can also direct to sign up page in this page.
 ![signin](./images/SignIn.png)
+
 If the email address typed in is not in the right format, the page will show error message.
 ![signinerror1](./images/Signerror1.png)
+
 Also, if the email address or password is wrong, the page will also show related error message.
 ![signinerror2](./images/signinerror2.png)
 
@@ -24,6 +26,7 @@ Also, if the email address or password is wrong, the page will also show related
 On the navigation bar, we have mini list on left side that can direct us to home page and movie list page, we also have search function that can redirect users to the movie list page based on the word they typed. We also have login function on the right side, after the user logged in, it will change to a mini list button with user name on it.
 ![home1](./images/home1.png)
 ![home2](./images/home2.png)
+
 There’re three top movie trailers, and we can watch each trailer by click the play button. We can also click the detail button to see the detail of each movie.
 ![home3](./images/home3.png)
 
