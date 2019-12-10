@@ -24,7 +24,6 @@ Create a `.env` file in `backend` folder, put your
 
 1. Local
 
-2. Twitter OAuth
 
 
 
@@ -179,9 +178,9 @@ Use `GET api/movie/{id}` to access the specific movie.
 
 Use `GET api/review` to get all the review related to a movie, if the user is logged in, then they can modify the review created by themselves, otherwise, they can only read those reviews.
 
-Use `POST api/review` to create a new review of a movie.
+Use `POST api/movie/:id` to create a new review of a movie.
 
-Use `PUT api/review` to modify the review
+Use `PUT api/movie/:id` to modify the review
 
 Use `GET api/movie/search?name=xxx` to search a movie with name `xxx`
 
