@@ -11,6 +11,19 @@ require('../config/passport')(passport);
 
 // GET /api/movie/search?name=sdasd
 
+
+router.get('/all', (req, res, next) => {
+    Movie.find({}).select('name -_id').then(movies => {
+        res.status(200).json({
+            movies: movies
+        });
+    }).catch(err => {
+        res.status(500).json({
+            error: err
+        });
+    });
+});
+
 router.get('/top', (req, res, next) => {
     let n = req.query.n;
     var topn = 3;

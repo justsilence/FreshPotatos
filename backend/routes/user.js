@@ -53,10 +53,16 @@ router.post('/login', (req, res, next) => {
     passport.authenticate('login', (err, user, info) => {
         if (err) {
             console.log(err);
+            return res.status(500).json({
+                error: err
+            });
         }
         if (info) {
             console.log(info.message);
-            res.send(info.message);
+            return res.status(400).json({
+                auth: false,
+                error: info.message
+            });
         } else {
             req.logIn(user, err => {
                 User.findOne({
