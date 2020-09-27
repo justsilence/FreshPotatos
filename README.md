@@ -1,7 +1,5 @@
 # FreshPotatos
 
-[Our Report](https://github.com/justsilence/FreshPotatos/blob/master/Report.md)
-
 ## How to run our code
 
 ## Get the code 
